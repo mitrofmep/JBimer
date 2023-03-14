@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить коллизию</title>
+</head>
+<body>
+
+
+<form th:method="POST" th:action="@{/collisions}" th:object="${collision}">
+    <label for="status">Статус: </label>
+    <input type="text" th:field="*{status}" id="status"/>
+    <div style="color:red" th:if="${#fields.hasErrors('status')}" th:errors="*{status}">status error</div>
+    <br/>
+    <label for="service">Раздел: </label>
+    <input type="text" th:field="*{service}" id="service"/>
+    <div style="color:red" th:if="${#fields.hasErrors('service')}" th:errors="*{service}">service error</div>
+    <br/>
+    <label for="idElement1">ID элемента А: </label>
+    <input type="text" th:field="*{idElement1}" id="idElement1"/>
+    <div style="color:red" th:if="${#fields.hasErrors('idElement1')}" th:errors="*{idElement1}">idElement1 error</div>
+    <br/>
+    <label for="idElement2">ID элемента Б: </label>
+    <input type="text" th:field="*{idElement2}" id="idElement2"/>
+    <div style="color:red" th:if="${#fields.hasErrors('idElement2')}" th:errors="*{idElement2}">idElement2 error</div>
+    <br/>
+    <input type="submit" value="Добавить"/>
+</form>
+
+
+</body>
+</html>

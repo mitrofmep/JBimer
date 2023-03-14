@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Коллизии</title>
+</head>
+<body>
+
+<div th:each="collision : ${collisions}">
+
+  <a th:href="@{/collisions/{id}(id=${collision.getId()})}"
+     th:text="${collision.getService() + ' - ' + collision.getStatus() + ' - ID элемента А:'
+     + collision.getIdElement1() + '. ID элемента B:' + collision.getIdElement2()}">collision</a>
+    <hr/>
+</div>
+<br/>
+<a href="/collisions/new">Добавить</a>
+</body>
+</html>

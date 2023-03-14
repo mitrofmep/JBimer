@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль инженера</title>
+</head>
+<body>
+<p th:text="${engineer.getFirstName() + ' ' + engineer.getLastName()}">VALUE</p>
+<p th:text="${'Раздел: ' + engineer.getService()}">VALUE</p>
+<p th:text="${'Email: ' + engineer.getEmail()}">VALUE</p>
+<p th:text="${'Telegram username: @' + engineer.getTgUsername()}">VALUE</p>
+<br/>
+
+<a th:href="@{/engineers/{id}/edit(id=${engineer.getId()})}">Редактировать</a>
+
+<form th:method="DELETE" th:action="@{/engineers/{id}(id=${engineer.getId()})}">
+    <input type="submit" value="Удалить">
+</form>
+
+<a href="/engineers">Вернуться на главную</a>
+
+
+
+</body>
+</html>
+

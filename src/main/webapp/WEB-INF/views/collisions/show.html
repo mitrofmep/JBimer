@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Страница коллизии</title>
+</head>
+<body>
+<p th:text="${'Статус: ' + collision.getStatus()}">VALUE</p>
+<p th:text="${'Раздел: ' + collision.getService()}">VALUE</p>
+<p th:text="${'ID элемента А: ' + collision.getIdElement1()}">VALUE</p>
+<p th:text="${'ID элемента Б: ' + collision.getIdElement2()}">VALUE</p>
+<br/>
+
+<a th:href="@{/collisions/{id}/edit(id=${collision.getId()})}">Редактировать</a>
+
+<form th:method="DELETE" th:action="@{/collision/{id}(id=${collision.getId()})}">
+    <input type="submit" value="Удалить">
+</form>
+
+<a href="/collisions">Вернуться на главную</a>
+
+
+
+</body>
+</html>
+

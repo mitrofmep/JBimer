@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать</title>
+</head>
+<body>
+
+<form th:method="PATCH" th:action="@{/engineers/{id}(id=${engineer.getId()})}" th:object="${engineer}">
+    <label for="firstName">Имя: </label>
+    <input type="text" th:field="*{firstName}" id="firstName"/>
+    <div style="color:red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">firstName error</div>
+    <br/>
+    <label for="lastName">Фамилия: </label>
+    <input type="text" th:field="*{lastName}" id="lastName"/>
+    <div style="color:red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">lastName error</div>
+    <br/>
+    <label for="service">Раздел: </label>
+    <input type="text" th:field="*{service}" id="service"/>
+    <div style="color:red" th:if="${#fields.hasErrors('service')}" th:errors="*{service}">service error</div>
+    <br/>
+    <label for="email">Email: </label>
+    <input type="text" th:field="*{email}" id="email"/>
+    <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email error</div>
+    <br/>
+    <label for="tgUsername">Telegram: </label>
+    <input type="text" th:field="*{tgUsername}" id="tgUsername"/>
+    <div style="color:red" th:if="${#fields.hasErrors('tgUsername')}" th:errors="*{tgUsername}">tgUsername error</div>
+    <br/>
+    <input type="submit" value="Обновить"/>
+</form>
+
+
+</body>
+</html>

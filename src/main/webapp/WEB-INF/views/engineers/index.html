@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Сотрудники</title>
+</head>
+<body>
+
+<div th:each="engineer : ${engineers}">
+
+  <a th:href="@{/engineers/{id}(id=${engineer.getId()})}"
+     th:text="${engineer.getService() + ' - ' + engineer.getFirstName() + ' ' +
+      engineer.getLastName() + ' - @' + engineer.getTgUsername()}">user</a>
+    <hr/>
+</div>
+<br/>
+<a href="/engineers/new">Добавить</a>
+</body>
+</html>
