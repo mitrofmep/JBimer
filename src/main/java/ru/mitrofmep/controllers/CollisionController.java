@@ -27,6 +27,7 @@ public class CollisionController {
     @GetMapping()
     public String index(Model model) {
         model.addAttribute("collisions", collisionDAO.index());
+        model.addAttribute("engineers", engineerDAO.index());
         return "collisions/index";
     }
 
@@ -67,7 +68,7 @@ public class CollisionController {
 
         if (bindingResult.hasErrors()) return "collisions/edit";
         collisionDAO.update(id, collision);
-        return "redirect:/collisions";
+        return String.format("redirect:/collisions/%s", id);
     }
 
     @DeleteMapping("/{id}")
@@ -82,9 +83,7 @@ public class CollisionController {
     public String setEngineer(@ModelAttribute("collision") Collision collision,
                               @PathVariable("id") int id) {
 
-        System.out.println(id);
-        System.out.println(collision.getEngineer_id());
         collisionDAO.set(id, collision.getEngineer_id());
-        return "redirect:/collisions";
+        return String.format("redirect:/collisions/%s", id);
     }
 }

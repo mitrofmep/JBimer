@@ -6,8 +6,8 @@
 </head>
 <body>
 
-<form th:method="PATCH" th:action="@{/collisions/set{id}(id=${collision.getId()})}">
-    <label for="collision">Выберите инженера:</label>
+<form th:method="PATCH" th:action="@{/collisions/set{id}(id=${collision.getId()})}" th:if="${collision.getEngineer_id() == 0}">
+    <label for="collision">Ответственный:</label>
     <select id="collision" th:object="${collision}" th:field="*{engineer_id}">
         <option th:each="engineer : ${engineers}" th:value="${engineer.getId()}"
                 th:text="${engineer.getFirstName() + ' ' + engineer.getLastName()
@@ -17,19 +17,29 @@
     <input type="submit" value="Назначить"/>
 </form>
 
+<div th:each="engineer : ${engineers}" th:if="${engineer.getId() == collision.getEngineer_id() && collision.getEngineer_id() != 0}">
+    <p>
+        <h4>Ответственный: </h4>
+        <a th:href="@{/engineers/{id}(id=${engineer.getId()})}" th:text="${engineer.getFirstName() + ' ' + engineer.getLastName()}"></a>
+    </p>
+    <form th:method="PATCH" th:action="@{/collisions/set{id}(id=${collision.getId()})}" th:value="0">
+        <input type="submit" value="Снять задачу">
+    </form>
+</div>
+
 <p th:text="${'Статус: ' + collision.getStatus()}">VALUE</p>
 <p th:text="${'Раздел: ' + collision.getService()}">VALUE</p>
 <p th:text="${'ID элемента А: ' + collision.getIdElement1()}">VALUE</p>
 <p th:text="${'ID элемента Б: ' + collision.getIdElement2()}">VALUE</p>
 <br/>
-
-<a th:href="@{/collisions/{id}/edit(id=${collision.getId()})}">Редактировать</a>
-
+<button>
+    <a th:href="@{/collisions/{id}/edit(id=${collision.getId()})}">Редактировать</a>
+</button>
 <form th:method="DELETE" th:action="@{/collisions/{id}(id=${collision.getId()})}">
     <input type="submit" value="Удалить">
 </form>
 
-<a href="/collisions">Назад</a>
+<a href="/collisions">Все коллизии</a>
 
 
 

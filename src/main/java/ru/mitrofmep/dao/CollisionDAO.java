@@ -56,7 +56,9 @@ public class CollisionDAO {
     }
 
     public void set(int collision_id, int engineer_id) {
-        jdbcTemplate.update("UPDATE collision SET engineer_id=? WHERE id=?",
+        if (engineer_id == 0) {
+            jdbcTemplate.update("UPDATE collision SET engineer_id=NULL WHERE id=?", collision_id);
+        } else jdbcTemplate.update("UPDATE collision SET engineer_id=? WHERE id=?",
                 engineer_id, collision_id);
     }
 

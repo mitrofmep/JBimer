@@ -7,11 +7,12 @@
 <body>
 <p th:text="'Всего инженеров: ' +${engineers.size()}"></p>
 <div th:each="engineer : ${engineers}">
-
-  <a th:href="@{/engineers/{id}(id=${engineer.getId()})}"
-     th:text="${engineer.getService() + ' - ' + engineer.getFirstName() + ' ' +
+    <button>
+        <a th:href="@{/engineers/{id}(id=${engineer.getId()})}"
+           th:text="${engineer.getService() + ' - ' + engineer.getFirstName() + ' ' +
       engineer.getLastName() + ' - @' + engineer.getTgUsername()}">user</a>
-    <hr/>
+    </button>
+
 </div>
 <br/>
 <a href="/engineers/new">Добавить</a>
