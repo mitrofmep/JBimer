@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Сотрудники</title>
 </head>
 <body>
-
+<p th:text="'Всего инженеров: ' +${engineers.size()}"></p>
 <div th:each="engineer : ${engineers}">
 
   <a th:href="@{/engineers/{id}(id=${engineer.getId()})}"
@@ -15,5 +15,7 @@
 </div>
 <br/>
 <a href="/engineers/new">Добавить</a>
+<br/>
+<a href="/main">Вернуться на главную</a>
 </body>
 </html>

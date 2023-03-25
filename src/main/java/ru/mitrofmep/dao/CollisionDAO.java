@@ -15,6 +15,12 @@ import java.util.Optional;
 public class CollisionDAO {
 
     private final JdbcTemplate jdbcTemplate;
+    private static BeanPropertyRowMapper<Collision> collisionMapper;
+
+    static {
+        collisionMapper = new BeanPropertyRowMapper<>(Collision.class);
+        collisionMapper.setPrimitivesDefaultedForNullValue(true);
+    }
 
     @Autowired
     public CollisionDAO(JdbcTemplate jdbcTemplate) {
@@ -22,11 +28,15 @@ public class CollisionDAO {
     }
 
     public List<Collision> index() {
-        return jdbcTemplate.query("SELECT * FROM collision", new BeanPropertyRowMapper<>(Collision.class));
+        return jdbcTemplate.query("SELECT * FROM collision", collisionMapper);
+    }
+
+    public List<Collision> index(int engineer_id) {
+        return jdbcTemplate.query("SELECT * FROM collision WHERE engineer_id=?", new Object[]{engineer_id}, collisionMapper);
     }
 
     public Collision show(int id) {
-        return jdbcTemplate.query("SELECT * FROM collision WHERE id = ?", new Object[]{id}, new BeanPropertyRowMapper<>(Collision.class))
+        return jdbcTemplate.query("SELECT * FROM collision WHERE id = ?", new Object[]{id}, collisionMapper)
                 .stream().findAny().orElse(null);
     }
 
@@ -43,6 +53,11 @@ public class CollisionDAO {
 
     public void delete(int id) {
         jdbcTemplate.update("DELETE FROM collision WHERE id=?", id);
+    }
+
+    public void set(int collision_id, int engineer_id) {
+        jdbcTemplate.update("UPDATE collision SET engineer_id=? WHERE id=?",
+                engineer_id, collision_id);
     }
 
 }

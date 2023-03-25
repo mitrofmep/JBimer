@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.mitrofmep.dao.CollisionDAO;
 import ru.mitrofmep.dao.EngineerDAO;
 import ru.mitrofmep.models.Collision;
-import ru.mitrofmep.models.Engineer;
-import ru.mitrofmep.util.EngineerValidator;
 
 import javax.validation.Valid;
 
@@ -18,10 +16,12 @@ import javax.validation.Valid;
 public class CollisionController {
 
     private final CollisionDAO collisionDAO;
+    private final EngineerDAO engineerDAO;
 
     @Autowired
-    public CollisionController(CollisionDAO collisionDAO) {
+    public CollisionController(CollisionDAO collisionDAO, EngineerDAO engineerDAO) {
         this.collisionDAO = collisionDAO;
+        this.engineerDAO = engineerDAO;
     }
 
     @GetMapping()
@@ -33,6 +33,7 @@ public class CollisionController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("collision", collisionDAO.show(id));
+        model.addAttribute("engineers", engineerDAO.index());
         return "collisions/show";
     }
 
@@ -75,5 +76,15 @@ public class CollisionController {
         collisionDAO.delete(id);
         return "redirect:/collisions";
 
+    }
+
+    @PatchMapping("/set{id}")
+    public String setEngineer(@ModelAttribute("collision") Collision collision,
+                              @PathVariable("id") int id) {
+
+        System.out.println(id);
+        System.out.println(collision.getEngineer_id());
+        collisionDAO.set(id, collision.getEngineer_id());
+        return "redirect:/collisions";
     }
 }

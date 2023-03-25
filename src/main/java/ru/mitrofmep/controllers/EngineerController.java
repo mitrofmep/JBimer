@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.mitrofmep.dao.CollisionDAO;
 import ru.mitrofmep.dao.EngineerDAO;
 import ru.mitrofmep.models.Engineer;
 import ru.mitrofmep.util.EngineerValidator;
@@ -17,11 +18,13 @@ public class EngineerController {
 
     private final EngineerDAO engineerDAO;
     private final EngineerValidator engineerValidator;
+    private final CollisionDAO collisionDAO;
 
     @Autowired
-    public EngineerController(EngineerDAO engineerDAO, EngineerValidator engineerValidator) {
+    public EngineerController(EngineerDAO engineerDAO, EngineerValidator engineerValidator, CollisionDAO collisionDAO) {
         this.engineerDAO = engineerDAO;
         this.engineerValidator = engineerValidator;
+        this.collisionDAO = collisionDAO;
     }
 
     @GetMapping()
@@ -33,6 +36,7 @@ public class EngineerController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("engineer", engineerDAO.show(id));
+        model.addAttribute("collisions", collisionDAO.index(id));
         return "engineers/show";
     }
 

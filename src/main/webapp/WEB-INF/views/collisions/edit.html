@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Редактировать</title>
@@ -23,7 +23,7 @@
     <input type="text" th:field="*{idElement2}" id="idElement2"/>
     <div style="color:red" th:if="${#fields.hasErrors('idElement2')}" th:errors="*{idElement2}">idElement2 error</div>
     <br/>
-    <input type="submit" value="Добавить"/>
+    <input type="submit" value="Обновить"/>
 </form>
 
 

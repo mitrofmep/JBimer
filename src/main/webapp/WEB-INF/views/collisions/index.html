@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Коллизии</title>
 </head>
 <body>
-
+<p th:text="'Всего коллизий: ' +${collisions.size()}"></p>
 <div th:each="collision : ${collisions}">
 
   <a th:href="@{/collisions/{id}(id=${collision.getId()})}"
@@ -15,5 +15,7 @@
 </div>
 <br/>
 <a href="/collisions/new">Добавить</a>
+<br/>
+<a href="/main">Вернуться на главную</a>
 </body>
 </html>

@@ -28,11 +28,15 @@ public class Collision {
     @Positive(message = "Некорректное значение")
     private int idElement2;
 
-    public Collision(String status, String service, int idElement1, int idElement2) {
+
+    private int engineer_id;
+
+    public Collision(String status, String service, int idElement1, int idElement2, int engineer_id) {
         this.status = status;
         this.service = service;
         this.idElement1 = idElement1;
         this.idElement2 = idElement2;
+        this.engineer_id = engineer_id;
     }
 
     public Collision() {
@@ -76,5 +80,13 @@ public class Collision {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getEngineer_id() {
+        return engineer_id;
+    }
+
+    public void setEngineer_id(int engineer_id) {
+        this.engineer_id = engineer_id;
     }
 }

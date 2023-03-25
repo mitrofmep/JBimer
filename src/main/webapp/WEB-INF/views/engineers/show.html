@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Профиль инженера</title>
@@ -11,13 +11,21 @@
 <p th:text="${'Telegram username: @' + engineer.getTgUsername()}">VALUE</p>
 <br/>
 
+<div th:each="collision : ${collisions}">
+
+    <a th:href="@{/collisions/{id}(id=${collision.getId()})}"
+       th:text="${collision.getService() + ' - ' + collision.getStatus() + ' - ID элемента А:'
+     + collision.getIdElement1() + '. ID элемента B:' + collision.getIdElement2()}">collision</a>
+    <hr/>
+</div>
+
 <a th:href="@{/engineers/{id}/edit(id=${engineer.getId()})}">Редактировать</a>
 
 <form th:method="DELETE" th:action="@{/engineers/{id}(id=${engineer.getId()})}">
     <input type="submit" value="Удалить">
 </form>
 
-<a href="/engineers">Вернуться на главную</a>
+<a href="/engineers">Назад</a>
 
 
 

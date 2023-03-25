@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Страница коллизии</title>
 </head>
 <body>
+
+<form th:method="PATCH" th:action="@{/collisions/set{id}(id=${collision.getId()})}">
+    <label for="collision">Выберите инженера:</label>
+    <select id="collision" th:object="${collision}" th:field="*{engineer_id}">
+        <option th:each="engineer : ${engineers}" th:value="${engineer.getId()}"
+                th:text="${engineer.getFirstName() + ' ' + engineer.getLastName()
+                + ' ' + engineer.getService()}"></option>
+    </select>
+
+    <input type="submit" value="Назначить"/>
+</form>
+
 <p th:text="${'Статус: ' + collision.getStatus()}">VALUE</p>
 <p th:text="${'Раздел: ' + collision.getService()}">VALUE</p>
 <p th:text="${'ID элемента А: ' + collision.getIdElement1()}">VALUE</p>
@@ -13,11 +25,11 @@
 
 <a th:href="@{/collisions/{id}/edit(id=${collision.getId()})}">Редактировать</a>
 
-<form th:method="DELETE" th:action="@{/collision/{id}(id=${collision.getId()})}">
+<form th:method="DELETE" th:action="@{/collisions/{id}(id=${collision.getId()})}">
     <input type="submit" value="Удалить">
 </form>
 
-<a href="/collisions">Вернуться на главную</a>
+<a href="/collisions">Назад</a>
 
 
 

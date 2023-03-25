@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Главная страница</title>
+</head>
+<body>
+
+<a href="/engineers" th:text="'Инженеры(' +${engineers.size() + ')'}"></a>
+<br/>
+<a href="/collisions" th:text="'Коллизии(' +${collisions.size() + ')'}"></a>
+
+</body>
+</html>
