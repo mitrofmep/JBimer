@@ -1,7 +1,6 @@
-# ClashTasker - BIM Model Collision Conflict Management Tool
+# ClashTasker - BIM Model Collision Conflict Management Tool #
 
 ClashTasker is an application designed specifically for MEP engineers to easily manage and resolve collision conflicts in BIM models. The application works by generating a list of collision conflicts within the model, along with information about the department of the engineers involved and the element IDs from Autodesk Revit.
----
 
 ## Features
 - Generate list of collision conflicts within the BIM model
@@ -20,15 +19,18 @@ ClashTasker is built using the following technologies:
 
 ## Installation
 1. Clone the repository to your local machine:
+
    `git clone https://github.com/mitrofmep/clash-tasker.git`
 2. Make sure you have Java 11, Apache Tomcat and PostgreSQL installed on your machine.
 3. Set DB properties to `database.properties`. As example use `database.properties.origin`
 4. Open a terminal and navigate to the root directory of the project.
 5. Build the project using Maven by running the following command:
+
    `mvn clean package`
 6. After a successful build, locate the `clash-tasker.war` file in the target directory.
 7. Copy the `clash-tasker.war` file to the `webapps` directory of your Tomcat installation.
 8. Start Tomcat by running the following command:
+
    `catalina.sh run`
 9. Open a web browser and navigate to `http://localhost:8080/main` to access the application.
 
@@ -41,5 +43,5 @@ ClashTasker is built using the following technologies:
 ## Contributions
 Contributions are welcome and encouraged! Please feel free to submit pull requests or open issues if you encounter any problems.
 
-##License
+## License
 This application is licensed under the MIT License.
