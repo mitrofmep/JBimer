@@ -2,19 +2,34 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Сотрудники</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<p th:text="'Всего инженеров: ' +${engineers.size()}"></p>
-<div th:each="engineer : ${engineers}">
-    <button>
-        <a th:href="@{/engineers/{id}(id=${engineer.getId()})}"
-           th:text="${engineer.getService() + ' - ' + engineer.getFirstName() + ' ' +
-      engineer.getLastName() + ' - @' + engineer.getTgUsername()}">user</a>
-    </button>
-
-</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
 <br/>
+<div class="container" style="max-width: 500px">
+    <div class="text-center border py-2 mb-3">
+        <h5 class="mb-0">Инженеры <span class="badge bg-secondary" th:text="${engineers.size()}"></span></h5>
+    </div>
+    <ul class="list-group">
+        <a th:each="engineer : ${engineers}" th:href="@{/engineers/{id}(id=${engineer.id})}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+            <div>
+                <span class="mr-2" th:text="${engineer.getFirstName() + ' ' + engineer.getLastName()}"></span>
+                <span class="badge badge-primary" th:text="${engineer.getService()}"></span>
+            </div>
+            <span th:text="${'@' + engineer.getTgUsername()}"></span>
+        </a>
+    </ul>
+</div>
+
+
+
+
+
+
 <a href="/engineers/new">Добавить</a>
 <br/>
 <a href="/main">Вернуться на главную</a>
