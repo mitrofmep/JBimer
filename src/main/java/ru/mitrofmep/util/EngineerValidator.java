@@ -28,7 +28,7 @@ public class EngineerValidator implements Validator {
 
         if (engineerDAO.show(engineer.getEmail()).isPresent()) {
             if (engineerDAO.show(engineer.getEmail()).get().getId() != engineer.getId()) {
-                errors.rejectValue("email", "", "Пользователь с указанным email уже существует");
+                errors.rejectValue("email", "", "This email is already used");
             }
         }
     }

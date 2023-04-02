@@ -7,26 +7,26 @@ public class Engineer {
 
     private int id;
 
-    @NotEmpty(message = "Поле не заполнено")
-    @Size(min = 2, max = 30, message = "Имя должно быть короче 30 символов")
+    @NotEmpty(message = "Field is empty")
+    @Size(min = 2, max = 30, message = "Maximum 30 characters")
     private String firstName;
 
-    @NotEmpty(message = "Поле не заполнено")
-    @Size(min = 2, max = 30, message = "Фамилия должна быть короче 30 символов")
+    @NotEmpty(message = "Field is empty")
+    @Size(min = 2, max = 30, message = "Maximum 30 characters")
     private String lastName;
 
     // Раздел проектирования
-    @NotEmpty(message = "Поле не заполнено")
+    @NotEmpty(message = "Field is empty")
     @Pattern(regexp = "\\D+",
-            message = "Введите аббревиатуру раздела заглавными буквами")
+            message = "Enter correct name of service, ex. OV")
     private String service;
 
-    @NotEmpty (message = "Поле не заполнено")
+    @NotEmpty (message = "Field is empty")
     @Email
     private String email;
 
     // Telegram username
-    @NotEmpty (message = "Поле не заполнено")
+    @NotEmpty (message = "Field is empty")
     private String tgUsername;
 
 
