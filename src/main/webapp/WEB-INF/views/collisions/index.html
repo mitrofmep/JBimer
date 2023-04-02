@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Коллизии</title>
+    <title>Collisions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
 <br/>
 <div class="text-center border p-2">
-    Всего коллизий <span class="badge bg-secondary" th:text="${collisions.size()}"></span>
+    Коллизии <span class="badge bg-secondary" th:text="${collisions.size()}"></span>
 </div>
 <br/>
 <div class="container" style="max-width: 800px">
@@ -18,23 +19,56 @@
     <table class="table table-striped table-hover">
         <thead>
         <tr>
-            <th style="width: 50px">Service</th>
-            <th style="width: 100px">Status</th>
-            <th style="width: 200px;">ID элемента А</th>
-            <th style="width: 200px;">ID элемента B</th>
+            <th style="width: 50px">Раздел</th>
+            <th style="width: 100px">Статус</th>
+            <th style="width: 200px;">ID элемента 1</th>
+            <th style="width: 50px"></th>
+            <th style="width: 200px;">ID элемента 2</th>
+            <th style="width: 50px"></th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="collision : ${collisions}" th:sorted>
-            <td><a th:href="@{/collisions/{id}(id=${collision.getId()})}" th:text="${collision.getService()}"></a></td>
+            <td><a th:href="@{/collisions/{id}(id=${collision.getId()})}" class="badge badge-primary" th:text="${collision.getService()}"></a></td>
             <td><span th:text="${collision.getStatus()}"></span></td>
             <td><span th:text="${collision.getIdElement1()}"></span></td>
+            <td><button class="btn btn-light btn-sm" onclick="copyToClipboard(this)" th:attr="data-clipboard-text=${collision.getIdElement1()}">📋</button></td>
             <td><span th:text="${collision.getIdElement2()}"></span></td>
+            <td><button class="btn btn-light btn-sm" onclick="copyToClipboard(this)" th:attr="data-clipboard-text=${collision.getIdElement2()}">📋</button></td>
         </tr>
         </tbody>
     </table>
 </div>
 </div>
+
+<style>
+    .btn-color-transition {
+        transition: background-color 0.5s ease-in-out;
+    }
+</style>
+<script>
+    function copyToClipboard(button) {
+        var text = button.dataset.clipboardText;
+        var dummy = document.createElement("textarea");
+        document.body.appendChild(dummy);
+        dummy.value = text;
+        dummy.select();
+        document.execCommand("copy");
+        document.body.removeChild(dummy);
+
+        button.classList.remove("btn-light");
+        button.classList.add("btn-success", "btn-color-transition");
+        button.innerText = "✅";
+        button.disabled = true;
+
+        setTimeout(function() {
+            button.classList.remove("btn-success", "btn-color-transition");
+            button.classList.add("btn-light", "btn-color-transition");
+            button.innerText = "📋";
+            button.disabled = false;
+        }, 2000);
+    }
+</script>
 <a href="/collisions/new">Добавить</a>
 <br/>
 <a href="/main">Вернуться на главную</a>

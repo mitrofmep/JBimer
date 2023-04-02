@@ -1,15 +1,13 @@
 package ru.mitrofmep.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.mitrofmep.models.Engineer;
 
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -53,8 +51,6 @@ public class EngineerDAO {
     public void delete(int id) {
         jdbcTemplate.update("DELETE FROM engineer WHERE id=?", id);
     }
-
-
 
 
 }

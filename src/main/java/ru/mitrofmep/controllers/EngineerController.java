@@ -11,6 +11,9 @@ import ru.mitrofmep.models.Engineer;
 import ru.mitrofmep.util.EngineerValidator;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/engineers")
@@ -29,7 +32,15 @@ public class EngineerController {
 
     @GetMapping()
     public String index(Model model) {
-        model.addAttribute("engineers", engineerDAO.index());
+        List<Engineer> engineers = engineerDAO.index();
+        Map<Integer, Integer> collisionsForEachPerson = collisionDAO.getCollisionsPerPerson();
+
+        List<Engineer> sortedEngineers = engineers.stream()
+                .sorted((e1, e2) -> collisionsForEachPerson.get(e2.getId()) - collisionsForEachPerson.get(e1.getId()))
+                .collect(Collectors.toList());
+
+        model.addAttribute("engineers", sortedEngineers);
+        model.addAttribute("collisionsForEachPerson", collisionsForEachPerson);
         return "engineers/index";
     }
 

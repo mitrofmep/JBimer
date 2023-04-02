@@ -19,6 +19,7 @@
             <div>
                 <span class="mr-2" th:text="${engineer.getFirstName() + ' ' + engineer.getLastName()}"></span>
                 <span class="badge badge-primary" th:text="${engineer.getService()}"></span>
+                <span th:text="${collisionsForEachPerson.get(engineer.getId())}" th:class="${collisionsForEachPerson.get(engineer.getId()) == 0 ? 'badge badge-success' : 'badge badge-danger'}"></span>
             </div>
             <span th:text="${'@' + engineer.getTgUsername()}"></span>
         </a>

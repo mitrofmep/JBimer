@@ -38,7 +38,12 @@
     </div>
     <div class="form-group">
         <label for="tgUsername">Telegram: </label>
-        <input type="text" class="form-control" th:field="*{tgUsername}" id="tgUsername"/>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">@</span>
+            </div>
+            <input type="text" class="form-control" th:field="*{tgUsername}" id="tgUsername"/>
+        </div>
         <div style="color:red" th:if="${#fields.hasErrors('tgUsername')}" th:errors="*{tgUsername}">tgUsername error</div>
     </div>
     <br/>
