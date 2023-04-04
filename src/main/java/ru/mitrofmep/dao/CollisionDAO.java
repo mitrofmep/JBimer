@@ -39,7 +39,7 @@ public class CollisionDAO {
 
     // get Map<Engineer's id, Number of collisions> - for Engineer's index page to show the total amount of collisions for every engineer
     // Better refactor with JOIN, not to make multiple requests
-    public Map<Integer, Integer> getCollisionsPerPerson() {
+    public Map<Integer, Integer> getCollisionsPerPersons() {
         List<Integer> personIds = getAllPersonIds();
 
         Map<Integer, Integer> collisionsPerPerson = new HashMap<>();

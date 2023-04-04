@@ -11,21 +11,19 @@ public class Collision {
     private int id;
 
     // Статус пересечения
-    @NotEmpty(message = "Поле не заполнено")
-    @Size(min = 2, max = 30, message = "Статус должен быть короче 30 символов")
+    @NotEmpty(message = "Field is empty")
     private String status;
 
     // Раздел проектирования
-    @NotEmpty(message = "Поле не заполнено")
-    @Size(min = 2, max = 10, message = "Наименование раздела должно быть короче 10 символов")
+    @NotEmpty(message = "Field is empty")
     private String service;
 
     // ID 1-го элемента
-    @Positive(message = "Некорректное значение")
+    @Positive(message = "Wrong value")
     private int idElement1;
 
     // ID 2-го элемента
-    @Positive(message = "Некорректное значение")
+    @Positive(message = "Wrong value")
     private int idElement2;
 
 

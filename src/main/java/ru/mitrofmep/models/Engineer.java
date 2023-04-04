@@ -8,11 +8,9 @@ public class Engineer {
     private int id;
 
     @NotEmpty(message = "Field is empty")
-    @Size(min = 2, max = 30, message = "Maximum 30 characters")
     private String firstName;
 
     @NotEmpty(message = "Field is empty")
-    @Size(min = 2, max = 30, message = "Maximum 30 characters")
     private String lastName;
 
     // Раздел проектирования

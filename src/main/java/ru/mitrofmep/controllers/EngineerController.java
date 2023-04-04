@@ -33,7 +33,7 @@ public class EngineerController {
     @GetMapping()
     public String index(Model model) {
         List<Engineer> engineers = engineerDAO.index();
-        Map<Integer, Integer> collisionsForEachPerson = collisionDAO.getCollisionsPerPerson();
+        Map<Integer, Integer> collisionsForEachPerson = collisionDAO.getCollisionsPerPersons();
 
         List<Engineer> sortedEngineers = engineers.stream()
                 .sorted((e1, e2) -> collisionsForEachPerson.get(e2.getId()) - collisionsForEachPerson.get(e1.getId()))
