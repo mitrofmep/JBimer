@@ -1,21 +1,26 @@
-# ClashTasker - BIM Model Collision Conflict Management Tool #
+# JBimer - BIM Model Collision Conflict Management Tool #
 
-ClashTasker is an application designed specifically for MEP engineers to easily manage and resolve collision conflicts in BIM models. The application works by generating a list of collision conflicts within the model, along with information about the department of the engineers involved and the element IDs from Autodesk Revit.
+**JBimer** designed specifically for **MEP** engineers to easily manage and resolve collision conflicts in **BIM** models. The application works with clash reports from **Autodesk Revit** and allows engineers to create tasks, track statistics, send reports to customers, manage documentation, and communicate through a built-in chat. With these features, the application provides a comprehensive solution for MEP engineers to streamline their workflow and improve collaboration.
 
 ## Features
-- Generate list of collision conflicts within the BIM model
-- View information about engineer departments and element IDs from Autodesk Revit
-- Assign engineers to specific conflicts for resolution
-- Monitor progress in real-time
-- Ability to automatically load a list of clashes exported from Autodesk Navisworks (coming soon)
+1. **Collision Conflict Resolution:** The application provides a simple and effective way for MEP engineers to manage and resolve collision conflicts in BIM models.
+2. **HTML Report Upload:** The BIM coordinator can upload HTML reports generated from Autodesk Revit, allowing engineers to easily view and analyze the collision conflicts.
+3. **Database Storage:** All collision objects are saved in the database and have an up-to-date status, making it easy to keep track of the progress and ensure that conflicts are resolved in a timely manner.
+4. **Task Management:** The BIM coordinator can assign tasks to specific engineers for resolving conflicts, or if not possible, allow engineers to choose which conflicts they will work on.
+5. **Real-time Statistics:** The application provides up-to-date statistics on the progress of conflict resolution, making it easy for the BIM coordinator and customers to monitor the project's status.
+6. **Automated Reports:** Automatically generated reports can be sent to customers to demonstrate the project's progress and ensure transparency in the process.
+7. **Notifications:** Users receive notifications when they are signed up for new conflicts, ensuring that they are aware of their responsibilities and can address the conflicts promptly.
+8. **Commenting and Chatting:** Users can comment on conflicts and chat with other members to resolve difficult problems quickly and efficiently.
+9. **Image Attachment:** Users can attach images to collision objects, providing a visual aid for resolving the conflicts.
 
 ## Stack
-ClashTasker is built using the following technologies:
-- Spring for the backend
-- PostgreSQL for the database
-- Java 11 for the programming language
-- Maven for dependency management
-- Apache Tomcat for the application server
+- Java 11
+- Spring Framework
+- Maven
+- PostgreSQL
+- Hibernate
+- Tomcat
+- JUnit
 
 ## Installation
 1. Clone the repository to your local machine:
