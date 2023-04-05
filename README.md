@@ -1,6 +1,6 @@
-# JBIMer - BIM Model Collision Conflict Management Tool #
+# JBimer - BIM Model Collision Conflict Management Tool #
 
-**JBIMer** designed specifically for **MEP** engineers to easily manage and resolve collision conflicts in **BIM** models. The application works with clash reports from **Autodesk Revit** and allows engineers to create tasks, track statistics, send reports to customers, manage documentation, and communicate through a built-in chat. With these features, the application provides a comprehensive solution for MEP engineers to streamline their workflow and improve collaboration.
+**JBimer** designed specifically for **MEP** engineers to easily manage and resolve collision conflicts in **BIM** models. The application works with clash reports from **Autodesk Revit** and allows engineers to create tasks, track statistics, send reports to customers, manage documentation, and communicate through a built-in chat. With these features, the application provides a comprehensive solution for MEP engineers to streamline their workflow and improve collaboration.
 
 ## Features
 1. **Collision Conflict Resolution:** The application provides a simple and effective way for MEP engineers to manage and resolve collision conflicts in BIM models.
