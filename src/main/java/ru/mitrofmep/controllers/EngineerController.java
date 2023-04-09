@@ -33,21 +33,22 @@ public class EngineerController {
     @GetMapping()
     public String index(Model model) {
         List<Engineer> engineers = engineerDAO.index();
-        Map<Integer, Integer> collisionsForEachPerson = collisionDAO.getCollisionsPerPersons();
+//        Map<Integer, Integer> collisionsForEachPerson = collisionDAO.getCollisionsPerPersons();
+//
+//        List<Engineer> sortedEngineers = engineers.stream()
+//                .sorted((e1, e2) -> collisionsForEachPerson.get(e2.getId()) - collisionsForEachPerson.get(e1.getId()))
+//                .collect(Collectors.toList());
 
-        List<Engineer> sortedEngineers = engineers.stream()
-                .sorted((e1, e2) -> collisionsForEachPerson.get(e2.getId()) - collisionsForEachPerson.get(e1.getId()))
-                .collect(Collectors.toList());
-
-        model.addAttribute("engineers", sortedEngineers);
-        model.addAttribute("collisionsForEachPerson", collisionsForEachPerson);
+//        model.addAttribute("engineers", sortedEngineers);
+//        model.addAttribute("collisionsForEachPerson", collisionsForEachPerson);
+        model.addAttribute("engineers", engineers);
         return "engineers/index";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("engineer", engineerDAO.show(id));
-        model.addAttribute("collisions", collisionDAO.index(id));
+//        model.addAttribute("collisions", collisionDAO.index(id));
         return "engineers/show";
     }
 

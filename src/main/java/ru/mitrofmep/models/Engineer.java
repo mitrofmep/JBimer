@@ -1,30 +1,43 @@
 package ru.mitrofmep.models;
 
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+
+import javax.persistence.*;
 import javax.validation.constraints.*;
 
+@Entity
+@Table(name = "engineer")
 public class Engineer {
 
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotEmpty(message = "Field is empty")
+    @Column(name = "firstname")
     private String firstName;
 
     @NotEmpty(message = "Field is empty")
+    @Column(name = "lastname")
     private String lastName;
 
-    // Раздел проектирования
     @NotEmpty(message = "Field is empty")
     @Pattern(regexp = "\\D+",
             message = "Enter correct name of service, ex. OV")
+    @Column(name = "service")
     private String service;
 
     @NotEmpty (message = "Field is empty")
     @Email
+    @Column(name = "email")
     private String email;
 
     // Telegram username
     @NotEmpty (message = "Field is empty")
+    @Column(name = "tgusername")
     private String tgUsername;
 
 

@@ -1,9 +1,8 @@
 package ru.mitrofmep.models;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
+
 import java.util.Date;
 
 public class Collision {
