@@ -13,14 +13,14 @@
     <a th:href="@{/engineers/{id}/edit(id=${engineer.getId()})}">Редактировать данные</a>
 </button>
 <br/>
-<div th:text="${'Активных задач: ' + collisions.size()}"></div>
-<div th:each="collision : ${collisions}">
-    <button>
-        <a th:href="@{/collisions/{id}(id=${collision.getId()})}"
-           th:text="${collision.getService() + ' - ' + collision.getStatus() + ' - ID элемента А:'
-     + collision.getIdElement1() + '. ID элемента B:' + collision.getIdElement2()}">collision</a>
-    </button>
-</div>
+<!--<div th:text="${'Активных задач: ' + collisions.size()}"></div>-->
+<!--<div th:each="collision : ${collisions}">-->
+<!--    <button>-->
+<!--        <a th:href="@{/collisions/{id}(id=${collision.getId()})}"-->
+<!--           th:text="${collision.getService() + ' - ' + collision.getStatus() + ' - ID элемента А:'-->
+<!--     + collision.getIdElement1() + '. ID элемента B:' + collision.getIdElement2()}">collision</a>-->
+<!--    </button>-->
+<!--</div>-->
 
 
 
