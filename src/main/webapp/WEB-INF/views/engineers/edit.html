@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Редактировать</title>
+    <title>Edit</title>
 </head>
 <body>
 
@@ -15,19 +15,19 @@
     <input type="text" th:field="*{lastName}" id="lastName"/>
     <div style="color:red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">lastName error</div>
     <br/>
-    <label for="service">Раздел: </label>
-    <input type="text" th:field="*{service}" id="service"/>
-    <div style="color:red" th:if="${#fields.hasErrors('service')}" th:errors="*{service}">service error</div>
+    <label for="discipline">Раздел: </label>
+    <input type="text" th:field="*{discipline}" id="discipline"/>
+    <div style="color:red" th:if="${#fields.hasErrors('discipline')}" th:errors="*{discipline}">discipline error</div>
     <br/>
     <label for="email">Email: </label>
     <input type="text" th:field="*{email}" id="email"/>
     <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email error</div>
     <br/>
-    <label for="tgUsername">Telegram: </label>
-    <input type="text" th:field="*{tgUsername}" id="tgUsername"/>
-    <div style="color:red" th:if="${#fields.hasErrors('tgUsername')}" th:errors="*{tgUsername}">tgUsername error</div>
+    <label for="telegramUsername">Telegram: </label>
+    <input type="text" th:field="*{telegramUsername}" id="telegramUsername"/>
+    <div style="color:red" th:if="${#fields.hasErrors('telegramUsername')}" th:errors="*{telegramUsername}">telegramUsername error</div>
     <br/>
-    <input type="submit" value="Обновить"/>
+    <input type="submit" value="Update"/>
 </form>
 
 

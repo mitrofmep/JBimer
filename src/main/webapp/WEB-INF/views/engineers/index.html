@@ -12,16 +12,16 @@
 <br/>
 <div class="container" style="max-width: 500px">
     <div class="text-center border py-2 mb-3">
-        <h5 class="mb-0">Инженеры <span class="badge bg-secondary" th:text="${engineers.size()}"></span></h5>
+        <h5 class="mb-0">Engineers <span class="badge bg-secondary" th:text="${engineers.size()}"></span></h5>
     </div>
     <ul class="list-group">
         <a th:each="engineer : ${engineers}" th:href="@{/engineers/{id}(id=${engineer.id})}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
             <div>
                 <span class="mr-2" th:text="${engineer.getFirstName() + ' ' + engineer.getLastName()}"></span>
-                <span class="badge badge-primary" th:text="${engineer.getService()}"></span>
-<!--                <span th:text="${collisionsForEachPerson.get(engineer.getId())}" th:class="${collisionsForEachPerson.get(engineer.getId()) == 0 ? 'badge badge-success' : 'badge badge-danger'}"></span>-->
+                <span class="badge badge-primary" th:text="${engineer.getDiscipline()}"></span>
+                <span th:text="${engineer.getCollisions().size()}" th:class="${engineer.getCollisions().size() == 0 ? 'badge badge-success' : 'badge badge-danger'}"></span>
             </div>
-            <span th:text="${'@' + engineer.getTgUsername()}"></span>
+            <span th:text="${'@' + engineer.getTelegramUsername()}"></span>
         </a>
     </ul>
 </div>
@@ -31,8 +31,8 @@
 
 
 
-<a href="/engineers/new">Добавить</a>
+<a href="/engineers/new">Add new</a>
 <br/>
-<a href="/main">Вернуться на главную</a>
+<a href="/main">Back to main</a>
 </body>
 </html>

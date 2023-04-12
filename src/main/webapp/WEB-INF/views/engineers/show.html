@@ -2,25 +2,30 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Профиль инженера</title>
+    <title>Engineer's page</title>
 </head>
 <body>
 <p th:text="${engineer.getFirstName() + ' ' + engineer.getLastName()}">VALUE</p>
-<p th:text="${'Раздел: ' + engineer.getService()}">VALUE</p>
+<p th:text="${'Discipline: ' + engineer.getDiscipline()}">VALUE</p>
 <p th:text="${'Email: ' + engineer.getEmail()}">VALUE</p>
-<p th:text="${'Telegram username: @' + engineer.getTgUsername()}">VALUE</p>
+<p th:text="${'Telegram username: @' + engineer.getTelegramUsername()}">VALUE</p>
 <button>
     <a th:href="@{/engineers/{id}/edit(id=${engineer.getId()})}">Редактировать данные</a>
 </button>
 <br/>
-<!--<div th:text="${'Активных задач: ' + collisions.size()}"></div>-->
-<!--<div th:each="collision : ${collisions}">-->
-<!--    <button>-->
-<!--        <a th:href="@{/collisions/{id}(id=${collision.getId()})}"-->
-<!--           th:text="${collision.getService() + ' - ' + collision.getStatus() + ' - ID элемента А:'-->
-<!--     + collision.getIdElement1() + '. ID элемента B:' + collision.getIdElement2()}">collision</a>-->
-<!--    </button>-->
-<!--</div>-->
+<div th:text="${'Active: ' + collisions.size()}"></div>
+<div th:each="collision : ${collisions}">
+    <button>
+        <a th:href="@{/collisions/{id}(id=${collision.getId()})}"
+           th:text="${collision.getStatus() + ' --- '
+           + collision.getDiscipline1() + '-'
+           + collision.getElementName1() + '-'
+           + collision.getElementId1() + '----'
+           + collision.getDiscipline2() + '-'
+           + collision.getElementName2() + '-'
+           + collision.getElementId2() + '----'}">collision</a>
+    </button>
+</div>
 
 
 
@@ -28,7 +33,7 @@
     <input type="submit" value="Удалить">
 </form>
 
-<a href="/engineers">Назад</a>
+<a href="/engineers">Back to Engineers</a>
 
 
 

@@ -6,40 +6,45 @@ import jakarta.validation.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.List;
 
 @Entity
-@Table(name = "engineer")
+@Table(name = "Engineer")
 public class Engineer {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "engineer_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotEmpty(message = "Field is empty")
-    @Column(name = "firstname")
+    @Column(name = "first_name")
     private String firstName;
 
     @NotEmpty(message = "Field is empty")
-    @Column(name = "lastname")
+    @Column(name = "last_name")
     private String lastName;
 
     @NotEmpty(message = "Field is empty")
     @Pattern(regexp = "\\D+",
             message = "Enter correct name of service, ex. OV")
-    @Column(name = "service")
-    private String service;
+    @Column(name = "discipline")
+    private String discipline;
 
     @NotEmpty (message = "Field is empty")
     @Email
     @Column(name = "email")
     private String email;
 
-    // Telegram username
     @NotEmpty (message = "Field is empty")
-    @Column(name = "tgusername")
-    private String tgUsername;
+    @Column(name = "telegram_username")
+    private String telegramUsername;
 
+    @ManyToMany(mappedBy = "engineersOnProject")
+    private List<Project> projects;
+
+    @OneToMany(mappedBy = "engineer", fetch = FetchType.EAGER)
+    private List<Collision> collisions;
 
     public Engineer() {
     }
@@ -47,9 +52,9 @@ public class Engineer {
     public Engineer(String firstName, String lastName, String service, String email, String tgUsername) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.service = service;
+        this.discipline = service;
         this.email = email;
-        this.tgUsername = tgUsername;
+        this.telegramUsername = tgUsername;
     }
 
     public int getId() {
@@ -76,12 +81,12 @@ public class Engineer {
         this.lastName = lastName;
     }
 
-    public String getService() {
-        return service;
+    public String getDiscipline() {
+        return discipline;
     }
 
-    public void setService(String service) {
-        this.service = service;
+    public void setDiscipline(String service) {
+        this.discipline = service;
     }
 
     public String getEmail() {
@@ -92,11 +97,27 @@ public class Engineer {
         this.email = email;
     }
 
-    public String getTgUsername() {
-        return tgUsername;
+    public String getTelegramUsername() {
+        return telegramUsername;
     }
 
-    public void setTgUsername(String tgUsername) {
-        this.tgUsername = tgUsername;
+    public void setTelegramUsername(String tgUsername) {
+        this.telegramUsername = tgUsername;
+    }
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
+
+    public List<Collision> getCollisions() {
+        return collisions;
+    }
+
+    public void setCollisions(List<Collision> collisions) {
+        this.collisions = collisions;
     }
 }

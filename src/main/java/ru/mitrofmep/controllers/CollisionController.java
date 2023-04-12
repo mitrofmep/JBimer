@@ -82,8 +82,11 @@ public class CollisionController {
     @PatchMapping("/set{id}")
     public String setEngineer(@ModelAttribute("collision") Collision collision,
                               @PathVariable("id") int id) {
-
-        collisionDAO.set(id, collision.getEngineer_id());
+        if (collision.getEngineer() == null) collisionDAO.set(id, 0);
+        else {
+            System.out.println(collision.getEngineer().getLastName());
+            collisionDAO.set(id, collision.getEngineer().getId());
+        }
         return String.format("redirect:/collisions/%s", id);
     }
 }

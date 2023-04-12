@@ -11,8 +11,7 @@ import ru.mitrofmep.models.Engineer;
 import ru.mitrofmep.util.EngineerValidator;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -33,14 +32,8 @@ public class EngineerController {
     @GetMapping()
     public String index(Model model) {
         List<Engineer> engineers = engineerDAO.index();
-//        Map<Integer, Integer> collisionsForEachPerson = collisionDAO.getCollisionsPerPersons();
-//
-//        List<Engineer> sortedEngineers = engineers.stream()
-//                .sorted((e1, e2) -> collisionsForEachPerson.get(e2.getId()) - collisionsForEachPerson.get(e1.getId()))
-//                .collect(Collectors.toList());
 
-//        model.addAttribute("engineers", sortedEngineers);
-//        model.addAttribute("collisionsForEachPerson", collisionsForEachPerson);
+        engineers.sort((e1, e2) -> Integer.compare(e2.getCollisions().size(), e1.getCollisions().size()));
         model.addAttribute("engineers", engineers);
         return "engineers/index";
     }
@@ -48,7 +41,7 @@ public class EngineerController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("engineer", engineerDAO.show(id));
-//        model.addAttribute("collisions", collisionDAO.index(id));
+        model.addAttribute("collisions", collisionDAO.index(id));
         return "engineers/show";
     }
 
@@ -61,7 +54,7 @@ public class EngineerController {
     public String create(@ModelAttribute("engineer") @Valid Engineer engineer,
                          BindingResult bindingResult) {
 
-        engineerValidator.validate(engineer, bindingResult);
+//        engineerValidator.validate(engineer, bindingResult);
 
         if (bindingResult.hasErrors()) return "engineers/new";
         engineerDAO.save(engineer);

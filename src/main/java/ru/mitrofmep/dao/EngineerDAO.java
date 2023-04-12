@@ -3,14 +3,11 @@ package ru.mitrofmep.dao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.mitrofmep.models.Engineer;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 
@@ -28,9 +25,7 @@ public class EngineerDAO {
     public List<Engineer> index() {
         Session session = sessionFactory.getCurrentSession();
 
-        List<Engineer> engineers = session.createQuery("select e from Engineer e", Engineer.class).getResultList();
-
-        return engineers;
+        return session.createQuery("select e from Engineer e", Engineer.class).getResultList();
     }
 
     @Transactional(readOnly = true)
@@ -57,13 +52,27 @@ public class EngineerDAO {
     public void save(Engineer engineer) {
         Session session = sessionFactory.getCurrentSession();
 
-        session.persist(engineer);
+        session.save(engineer);
     }
 
+    @Transactional
     public void update(int id, Engineer updatedEngineer) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Engineer engineerToBeUpdated = session.get(Engineer.class, id);
+
+        engineerToBeUpdated.setFirstName(updatedEngineer.getFirstName());
+        engineerToBeUpdated.setLastName(updatedEngineer.getLastName());
+        engineerToBeUpdated.setEmail(updatedEngineer.getEmail());
+        engineerToBeUpdated.setDiscipline(updatedEngineer.getDiscipline());
+        engineerToBeUpdated.setTelegramUsername(updatedEngineer.getTelegramUsername());
     }
 
+    @Transactional
     public void delete(int id) {
+        Session session = sessionFactory.getCurrentSession();
+
+        session.remove(session.get(Engineer.class, id));
     }
 
 
