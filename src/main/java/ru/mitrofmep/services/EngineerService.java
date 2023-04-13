@@ -5,23 +5,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.mitrofmep.dao.EngineerDAO;
 import ru.mitrofmep.models.Collision;
 import ru.mitrofmep.models.Engineer;
 import ru.mitrofmep.repositories.EngineersRepository;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
 public class EngineerService {
 
     private final EngineersRepository engineersRepository;
+    private final EngineerDAO engineerDAO;
 
     @Autowired
-    public EngineerService(EngineersRepository engineersRepository) {
+    public EngineerService(EngineersRepository engineersRepository, EngineerDAO engineerDAO) {
         this.engineersRepository = engineersRepository;
+        this.engineerDAO = engineerDAO;
     }
 
     public List<Engineer> findAll() {
@@ -29,10 +30,16 @@ public class EngineerService {
     }
 
     public List<Engineer> findAllSortedByCollisionsSize() {
-        List<Engineer> engineers = engineersRepository.findAll(Sort.by("discipline", "firstName"));
+        List<Engineer> engineers = new ArrayList<>(engineerDAO.index());
 
-//        engineers.sort((e1, e2) -> Integer.compare(e2.getCollisions().size(), e1.getCollisions().size()));
-
+        engineers.sort((e1, e2) -> {
+            int collisionsComparison = Integer.compare(e2.getCollisions().size(), e1.getCollisions().size());
+            if (collisionsComparison != 0) {
+                return collisionsComparison;
+            } else {
+                return Integer.compare(e1.getId(), e2.getId());
+            }
+        });
         return engineers;
     }
 

@@ -41,7 +41,7 @@ public class Engineer {
     @ManyToMany(mappedBy = "engineersOnProject")
     private List<Project> projects;
 
-    @OneToMany(mappedBy = "engineer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "engineer")
     private List<Collision> collisions;
 
     public Engineer() {

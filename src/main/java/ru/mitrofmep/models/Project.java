@@ -17,7 +17,7 @@ public class Project {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "projectBase", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "projectBase")
     private List<Collision> collisionsOnProject;
 
     @ManyToMany
