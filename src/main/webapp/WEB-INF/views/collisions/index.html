@@ -11,7 +11,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
 <br/>
 <div class="text-center border p-2">
-    Коллизии <span class="badge bg-secondary" th:text="${collisions.size()}"></span>
+    Collisions on page <span class="badge bg-secondary" th:text="${collisions.size()}"></span>
 </div>
 <br/>
 <div class="container" style="max-width: 800px">
@@ -69,8 +69,10 @@
         }, 2000);
     }
 </script>
-<a href="/collisions/new">Добавить</a>
+<!--<a href="/collisions/new">Add new</a>-->
 <br/>
-<a href="/main">Вернуться на главную</a>
+<a href="/main">Back to main</a>
+<br/>
+<a href="/engineers">All engineers</a>
 </body>
 </html>

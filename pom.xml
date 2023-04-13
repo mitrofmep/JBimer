@@ -67,11 +67,11 @@
 
     <!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
     <!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
-    <dependency>
-      <groupId>org.hibernate.validator</groupId>
-      <artifactId>hibernate-validator</artifactId>
-      <version>8.0.0.Final</version>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.hibernate.validator</groupId>-->
+<!--      <artifactId>hibernate-validator</artifactId>-->
+<!--      <version>8.0.0.Final</version>-->
+<!--    </dependency>-->
 
     <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
     <dependency>
@@ -105,6 +105,14 @@
       <artifactId>validation-api</artifactId>
       <version>1.1.0.Final</version>
     </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa -->
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-jpa</artifactId>
+      <version>2.4.7</version>
+    </dependency>
+
 
   </dependencies>
   <build>

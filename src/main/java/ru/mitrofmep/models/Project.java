@@ -1,8 +1,7 @@
 package ru.mitrofmep.models;
 
-import jakarta.validation.constraints.NotEmpty;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -14,11 +13,11 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotEmpty(message = "Field is empty")
+    @NotNull(message = "Field is empty")
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "projectBase")
+    @OneToMany(mappedBy = "projectBase", fetch = FetchType.EAGER)
     private List<Collision> collisionsOnProject;
 
     @ManyToMany

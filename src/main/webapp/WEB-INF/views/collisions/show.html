@@ -6,35 +6,38 @@
 </head>
 <body>
 
-<form th:method="PATCH" th:action="@{/collisions/set{id}(id=${collision.getId()})}" th:if="${collision.getEngineer() == null}">
-    <label for="collision">Assign engineer: </label>
-    <select id="collision" th:object="${collision}" th:field="*{engineer.id}">
-        <option th:each="engineer : ${engineers}" th:value="${engineer.getId()}"
-                th:text="${engineer.getFirstName() + ' ' + engineer.getLastName()
-                + ' ' + engineer.getDiscipline()}"></option>
-    </select>
+<div th:if="${owner}">
+    <span>Now assigned to: </span> <span th:text="${owner.getFirstName() + ' ' + owner.getLastName() + ' ' + owner.getDiscipline()}">Engineer</span>
 
-    <input type="submit" value="Assign engineer"/>
-</form>
-
-<div th:each="engineer : ${engineers}" th:if="${engineer.getId() == collision.getEngineer().getId() && collision.getEngineer().getId() != 0}">
-    <p>
-        <h4>Assigned to: </h4>
-        <a th:href="@{/engineers/{id}(id=${engineer.getId()})}" th:text="${engineer.getFirstName() + ' ' + engineer.getLastName()}"></a>
-    </p>
-    <form th:method="PATCH" th:action="@{/collisions/set{id}(id=${collision.getId()})}" th:value="0">
+    <form th:method="PATCH" th:action="@{/collisions/{id}/release(id=${collision.getId()})}">
         <input type="submit" value="Unassign">
     </form>
 </div>
+
+<div th:if="${engineers}">
+    <span>This collision is available, who should it be assigned to?</span>
+
+    <form th:method="PATCH" th:action="@{/collisions/{id}/assign(id=${collision.getId()})}">
+        <label for="engineer">Choose engineer</label>
+        <select th:object="${engineer}" th:field="*{id}" id="engineer">
+            <option th:each="engineer : ${engineers}" th:value="${engineer.getId()}" th:text="${engineer.getFirstName() + ' ' + engineer.getLastName() + ' ' + engineer.getDiscipline()}">
+            </option>
+        </select>
+        <input type="submit" value="Assign"/>
+    </form>
+</div>
+
+
+
 
 <p th:text="${'Status: ' + collision.getStatus()}">VALUE</p>
 <p th:text="${'Discipline: ' + collision.getDiscipline1()}">VALUE</p>
 <p th:text="${'ID Element 1: ' + collision.getElementId1()}">VALUE</p>
 <p th:text="${'ID Element 2: ' + collision.getElementId2()}">VALUE</p>
 <br/>
-<button>
-    <a th:href="@{/collisions/{id}/edit(id=${collision.getId()})}">Edit</a>
-</button>
+<!--<button>-->
+<!--    <a th:href="@{/collisions/{id}/edit(id=${collision.getId()})}">Edit</a>-->
+<!--</button>-->
 <form th:method="DELETE" th:action="@{/collisions/{id}(id=${collision.getId()})}">
     <input type="submit" value="Remove">
 </form>

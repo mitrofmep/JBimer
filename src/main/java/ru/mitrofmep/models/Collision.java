@@ -1,7 +1,5 @@
 package ru.mitrofmep.models;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Positive;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -149,5 +147,8 @@ public class Collision {
         this.comment = comment;
     }
 
-
+    public String getFullInfoString() {
+        return status + "---" + discipline1 + '-' + elementName1 + '-' + elementId1 + "---"
+                + discipline2 + '-' + elementName2 + '-' + elementId2;
+    }
 }

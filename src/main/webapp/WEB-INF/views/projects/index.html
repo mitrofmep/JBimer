@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Сотрудники</title>
+    <title>Projects</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
@@ -12,16 +12,14 @@
 <br/>
 <div class="container" style="max-width: 500px">
     <div class="text-center border py-2 mb-3">
-        <h5 class="mb-0">Engineers <span class="badge bg-secondary" th:text="${engineers.size()}"></span></h5>
+        <h5 class="mb-0">Projects <span class="badge bg-secondary" th:text="${projects.size()}"></span></h5>
     </div>
     <ul class="list-group">
-        <a th:each="engineer : ${engineers}" th:href="@{/engineers/{id}(id=${engineer.id})}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        <a th:each="project : ${projects}" th:href="@{/engineers/{id}(id=${project.id})}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
             <div>
-                <span class="mr-2" th:text="${engineer.getFirstName() + ' ' + engineer.getLastName()}"></span>
-                <span class="badge badge-primary" th:text="${engineer.getDiscipline()}"></span>
-                <span th:text="${engineer.getCollisions().size()}" th:class="${engineer.getCollisions().size() == 0 ? 'badge badge-success' : 'badge badge-danger'}"></span>
+                <span class="mr-2" th:text="${project.getName()}"></span>
+                <span th:text="${project.getCollisionsOnProject().size()}" th:class="${project.getCollisionsOnProject().size() == 0 ? 'badge badge-success' : 'badge badge-danger'}"></span>
             </div>
-            <span th:text="${'@' + engineer.getTelegramUsername()}"></span>
         </a>
     </ul>
 </div>
@@ -34,7 +32,5 @@
 <a href="/engineers/new">Add new</a>
 <br/>
 <a href="/main">Back to main</a>
-<br/>
-<a href="/collisions">All collisions</a>
 </body>
 </html>

@@ -1,29 +1,26 @@
 package ru.mitrofmep.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.mitrofmep.dao.CollisionDAO;
-import ru.mitrofmep.dao.EngineerDAO;
+import ru.mitrofmep.services.CollisionService;
+import ru.mitrofmep.services.EngineerService;
 
 @Controller
 public class HomeController {
 
-    private final EngineerDAO engineerDAO;
-    private final CollisionDAO collisionDAO;
+    private final EngineerService engineerService;
+    private final CollisionService collisionService;
 
-    @Autowired
-    public HomeController(EngineerDAO engineerDAO, CollisionDAO collisionDAO) {
-        this.engineerDAO = engineerDAO;
-        this.collisionDAO = collisionDAO;
+    public HomeController(EngineerService engineerService, CollisionService collisionService) {
+        this.engineerService = engineerService;
+        this.collisionService = collisionService;
     }
 
     @RequestMapping("/main")
     public String index(Model model) {
-        model.addAttribute("engineers", engineerDAO.index());
-        model.addAttribute("collisions", collisionDAO.index());
+        model.addAttribute("engineers", engineerService.findAll());
+        model.addAttribute("collisions", collisionService.findAll());
         return "index_main";
     }
 }

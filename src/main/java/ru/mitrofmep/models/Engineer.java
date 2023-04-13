@@ -1,8 +1,6 @@
 package ru.mitrofmep.models;
 
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -17,26 +15,26 @@ public class Engineer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotEmpty(message = "Field is empty")
+    @NotNull(message = "Field is empty")
+    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
     @Column(name = "first_name")
     private String firstName;
 
-    @NotEmpty(message = "Field is empty")
+    @NotNull(message = "Field is empty")
     @Column(name = "last_name")
     private String lastName;
 
-    @NotEmpty(message = "Field is empty")
+    @NotNull(message = "Field is empty")
     @Pattern(regexp = "\\D+",
             message = "Enter correct name of service, ex. OV")
     @Column(name = "discipline")
     private String discipline;
 
-    @NotEmpty (message = "Field is empty")
-    @Email
+    @NotNull (message = "Field is empty")
     @Column(name = "email")
     private String email;
 
-    @NotEmpty (message = "Field is empty")
+    @NotNull (message = "Field is empty")
     @Column(name = "telegram_username")
     private String telegramUsername;
 
@@ -119,5 +117,9 @@ public class Engineer {
 
     public void setCollisions(List<Collision> collisions) {
         this.collisions = collisions;
+    }
+
+    public String getFullNameWithDiscipline() {
+        return firstName + ' ' + lastName + '-' + discipline;
     }
 }

@@ -6,15 +6,16 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import ru.mitrofmep.dao.EngineerDAO;
 import ru.mitrofmep.models.Engineer;
+import ru.mitrofmep.services.EngineerService;
 
 @Component
 public class EngineerValidator implements Validator {
 
-    private final EngineerDAO engineerDAO;
+    private final EngineerService engineerService;
 
     @Autowired
-    public EngineerValidator(EngineerDAO engineerDAO) {
-        this.engineerDAO = engineerDAO;
+    public EngineerValidator(EngineerService engineerService) {
+        this.engineerService = engineerService;
     }
 
     @Override
@@ -25,11 +26,17 @@ public class EngineerValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         Engineer engineer = (Engineer) target;
+        if (engineer.getFirstName().isEmpty()) errors.rejectValue("firstName", "", "Field is empty");
+        if (engineer.getLastName().isEmpty()) errors.rejectValue("lastName", "", "Field is empty");
+        if (engineer.getDiscipline().isEmpty()) errors.rejectValue("discipline", "", "Field is empty");
+        if (engineer.getTelegramUsername().isEmpty()) errors.rejectValue("telegramUsername", "", "Field is empty");
+        if (engineer.getEmail().isEmpty()) errors.rejectValue("email", "", "Field is empty");
 
-        if (engineerDAO.show(engineer.getEmail()).isPresent()) {
-            if (engineerDAO.show(engineer.getEmail()).get().getId() != engineer.getId()) {
-                errors.rejectValue("email", "", "This email is already used");
-            }
-        }
+        if (engineerService.getEngineerByFullName(engineer.getFirstName(), engineer.getLastName()).isPresent())
+            errors.rejectValue("lastName", "", "Engineer with this name is already exist");
+        if (engineerService.getEngineerByTelegramUsername(engineer.getTelegramUsername()).isPresent())
+            errors.rejectValue("telegramUsername", "", "Engineer with this telegram username is already exist");
+        if (engineerService.getEngineerByEmail(engineer.getEmail()).isPresent())
+            errors.rejectValue("email", "", "Engineer with this email is already exist");
     }
 }
