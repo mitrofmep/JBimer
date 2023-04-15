@@ -20,7 +20,7 @@
 - PostgreSQL
 - Hibernate
 - Tomcat
-- JUnit
+- JUnit5
 
 ## Installation
 1. Clone the repository to your local machine:
