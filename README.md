@@ -15,7 +15,7 @@
 
 ## Stack
 - Java 11
-- Spring Framework
+- Spring
 - Maven
 - PostgreSQL
 - Hibernate
