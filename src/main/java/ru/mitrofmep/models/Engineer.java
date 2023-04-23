@@ -38,10 +38,10 @@ public class Engineer {
     @Column(name = "telegram_username")
     private String telegramUsername;
 
-    @ManyToMany(mappedBy = "engineersOnProject")
+    @ManyToMany(mappedBy = "engineersOnProject", fetch = FetchType.LAZY)
     private List<Project> projects;
 
-    @OneToMany(mappedBy = "engineer")
+    @OneToMany(mappedBy = "engineer", fetch = FetchType.LAZY)
     private List<Collision> collisions;
 
     public Engineer() {

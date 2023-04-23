@@ -17,10 +17,10 @@ public class Project {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "projectBase")
+    @OneToMany(mappedBy = "projectBase", fetch = FetchType.LAZY)
     private List<Collision> collisionsOnProject;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "Project_Engineer",
             joinColumns = @JoinColumn(name = "project_id"),

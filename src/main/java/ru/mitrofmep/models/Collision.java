@@ -13,11 +13,11 @@ public class Collision {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     private Project projectBase;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "engineer_id", referencedColumnName = "engineer_id")
     private Engineer engineer;
 

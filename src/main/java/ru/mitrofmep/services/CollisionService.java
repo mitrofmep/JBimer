@@ -1,10 +1,12 @@
 package ru.mitrofmep.services;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.mitrofmep.dao.CollisionDAO;
 import ru.mitrofmep.models.Collision;
 import ru.mitrofmep.models.Engineer;
 import ru.mitrofmep.repositories.CollisionsRepository;
@@ -17,10 +19,12 @@ import java.util.Optional;
 public class CollisionService {
 
     private final CollisionsRepository collisionsRepository;
+    private final CollisionDAO collisionDAO;
 
     @Autowired
-    public CollisionService(CollisionsRepository collisionsRepository) {
+    public CollisionService(CollisionsRepository collisionsRepository, CollisionDAO collisionDAO) {
         this.collisionsRepository = collisionsRepository;
+        this.collisionDAO = collisionDAO;
     }
 
     public List<Collision> findByEngineer(Engineer engineer) {
@@ -33,6 +37,12 @@ public class CollisionService {
 
     public Collision findOne(int id) {
         Optional<Collision> foundCollision = collisionsRepository.findById(id);
+
+        return foundCollision.orElse(null);
+    }
+
+    public Collision findOneAndEngineer(int id) {
+        Optional<Collision> foundCollision = collisionsRepository.findByIdFetchEngineer(id);
 
         return foundCollision.orElse(null);
     }
@@ -59,7 +69,7 @@ public class CollisionService {
 
     @Transactional
     public void release(int id) {
-        collisionsRepository.findById(id).ifPresent(
+        collisionsRepository.findByIdFetchEngineer(id).ifPresent(
                 collision -> {
                     collision.setEngineer(null);
                 }
@@ -68,7 +78,7 @@ public class CollisionService {
 
     @Transactional
     public void assign(int id, Engineer selectedEngineer) {
-        collisionsRepository.findById(id).ifPresent(
+        collisionsRepository.findByIdFetchEngineer(id).ifPresent(
                 collision -> {
                     collision.setEngineer(selectedEngineer);
                 }

@@ -1,6 +1,8 @@
 package ru.mitrofmep.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.mitrofmep.models.Engineer;
 
@@ -20,4 +22,7 @@ public interface EngineersRepository extends JpaRepository<Engineer, Integer> {
     Optional<Engineer> findByFirstNameAndLastName(String firstName, String LastName);
 
     Optional<Engineer> findByEmail(String email);
+
+    @Query("SELECT e FROM Engineer e LEFT JOIN FETCH e.collisions WHERE e.id = :id")
+    Optional<Engineer> findByIdFetchCollisions(@Param("id") int id);
 }

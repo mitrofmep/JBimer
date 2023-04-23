@@ -1,5 +1,6 @@
 package ru.mitrofmep.controllers;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,15 +19,11 @@ import javax.validation.Valid;
 @RequestMapping("/collisions")
 public class CollisionController {
 
-    private final CollisionDAO collisionDAO;
-    private final EngineerDAO engineerDAO;
     private final EngineerService engineerService;
     private final CollisionService collisionService;
 
     @Autowired
-    public CollisionController(CollisionDAO collisionDAO, EngineerDAO engineerDAO, EngineerService engineerService, CollisionService collisionService) {
-        this.collisionDAO = collisionDAO;
-        this.engineerDAO = engineerDAO;
+    public CollisionController(EngineerService engineerService, CollisionService collisionService) {
         this.engineerService = engineerService;
         this.collisionService = collisionService;
     }
@@ -40,7 +37,7 @@ public class CollisionController {
         else
             model.addAttribute("collisions", collisionService.findWithPagination(page, collisionsPerPage));
 
-        model.addAttribute("engineers", engineerService.findAll());
+//        model.addAttribute("engineers", engineerService.findAll());
         return "collisions/index";
     }
 
@@ -48,12 +45,14 @@ public class CollisionController {
     public String show(@PathVariable("id") int id,
                        Model model,
                        @ModelAttribute("engineer") Engineer engineer) {
-        model.addAttribute("collision", collisionService.findOne(id));
+        Collision collision = collisionService.findOneAndEngineer(id);
 
-        Engineer collisionOwner = collisionService.getCollisionEngineer(id);
+        Engineer collisionOwner = collision.getEngineer();
 
-        if (collisionOwner != null)
+        model.addAttribute("collision", collision);
+        if (collisionOwner != null){
             model.addAttribute("owner", collisionOwner);
+        }
         else
             model.addAttribute("engineers", engineerService.findAll());
 

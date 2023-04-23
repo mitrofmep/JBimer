@@ -19,19 +19,13 @@ import java.util.*;
 @RequestMapping("/engineers")
 public class EngineerController {
 
-    private final EngineerDAO engineerDAO;
     private final EngineerValidator engineerValidator;
-    private final CollisionDAO collisionDAO;
     private final EngineerService engineerService;
-    private final CollisionService collisionService;
 
     @Autowired
-    public EngineerController(EngineerDAO engineerDAO, EngineerValidator engineerValidator, CollisionDAO collisionDAO, EngineerService engineerService, CollisionService collisionService) {
-        this.engineerDAO = engineerDAO;
+    public EngineerController(EngineerValidator engineerValidator,EngineerService engineerService) {
         this.engineerValidator = engineerValidator;
-        this.collisionDAO = collisionDAO;
         this.engineerService = engineerService;
-        this.collisionService = collisionService;
     }
 
     @GetMapping()
@@ -44,8 +38,10 @@ public class EngineerController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("engineer", engineerService.findOne(id));
-        model.addAttribute("collisions", engineerService.getCollisionsByEngineerId(id));
+        Engineer engineer = engineerService.findOneAndItsCollisions(id);
+
+        model.addAttribute("engineer", engineer);
+        model.addAttribute("collisions", engineer.getCollisions());
         return "engineers/show";
     }
 

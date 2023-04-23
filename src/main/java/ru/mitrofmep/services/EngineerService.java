@@ -47,6 +47,7 @@ public class EngineerService {
         return engineersRepository.findByFirstNameAndLastName(firstName, lastName);
     }
 
+
     public Optional<Engineer> getEngineerByTelegramUsername(String telegramUsername) {
         return engineersRepository.findByTelegramUsername(telegramUsername);
     }
@@ -57,6 +58,12 @@ public class EngineerService {
 
     public Engineer findOne(int id) {
         Optional<Engineer> foundEngineer = engineersRepository.findById(id);
+
+        return foundEngineer.orElse(null);
+    }
+
+    public Engineer findOneAndItsCollisions(int id) {
+        Optional<Engineer> foundEngineer = engineersRepository.findByIdFetchCollisions(id);
 
         return foundEngineer.orElse(null);
     }
