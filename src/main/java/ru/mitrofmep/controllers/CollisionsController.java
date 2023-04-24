@@ -1,31 +1,28 @@
 package ru.mitrofmep.controllers;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.mitrofmep.dao.CollisionDAO;
-import ru.mitrofmep.dao.EngineerDAO;
 import ru.mitrofmep.models.Collision;
 import ru.mitrofmep.models.Engineer;
-import ru.mitrofmep.services.CollisionService;
-import ru.mitrofmep.services.EngineerService;
+import ru.mitrofmep.services.CollisionsService;
+import ru.mitrofmep.services.EngineersService;
 
 import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/collisions")
-public class CollisionController {
+public class CollisionsController {
 
-    private final EngineerService engineerService;
-    private final CollisionService collisionService;
+    private final EngineersService engineersService;
+    private final CollisionsService collisionsService;
 
     @Autowired
-    public CollisionController(EngineerService engineerService, CollisionService collisionService) {
-        this.engineerService = engineerService;
-        this.collisionService = collisionService;
+    public CollisionsController(EngineersService engineersService, CollisionsService collisionsService) {
+        this.engineersService = engineersService;
+        this.collisionsService = collisionsService;
     }
 
     @GetMapping()
@@ -33,9 +30,9 @@ public class CollisionController {
                         @RequestParam(value = "page", required = false) Integer page,
                         @RequestParam(value = "collisions_per_page", required = false) Integer collisionsPerPage) {
         if (page == null || collisionsPerPage == null)
-            model.addAttribute("collisions", collisionService.findAll());
+            model.addAttribute("collisions", collisionsService.findAll());
         else
-            model.addAttribute("collisions", collisionService.findWithPagination(page, collisionsPerPage));
+            model.addAttribute("collisions", collisionsService.findWithPagination(page, collisionsPerPage));
 
 //        model.addAttribute("engineers", engineerService.findAll());
         return "collisions/index";
@@ -45,7 +42,7 @@ public class CollisionController {
     public String show(@PathVariable("id") int id,
                        Model model,
                        @ModelAttribute("engineer") Engineer engineer) {
-        Collision collision = collisionService.findOneAndEngineer(id);
+        Collision collision = collisionsService.findOneAndEngineer(id);
 
         Engineer collisionOwner = collision.getEngineer();
 
@@ -54,7 +51,7 @@ public class CollisionController {
             model.addAttribute("owner", collisionOwner);
         }
         else
-            model.addAttribute("engineers", engineerService.findAll());
+            model.addAttribute("engineers", engineersService.findAll());
 
         return "collisions/show";
     }
@@ -70,7 +67,7 @@ public class CollisionController {
 
 
         if (bindingResult.hasErrors()) return "collisions/new";
-        collisionService.save(collision);
+        collisionsService.save(collision);
         return "redirect:/collisions";
     }
 
@@ -95,31 +92,33 @@ public class CollisionController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
 
-        collisionService.delete(id);
+        collisionsService.delete(id);
         return "redirect:/collisions";
 
     }
 
     @PatchMapping("/{id}/release")
     public String release(@PathVariable("id") int id) {
-        collisionService.release(id);
+        collisionsService.release(id);
         return "redirect:/collisions/" + id;
     }
 
     @PatchMapping("/{id}/assign")
     public String assign(@PathVariable("id") int id, @ModelAttribute("engineer")Engineer engineer) {
-        collisionService.assign(id, engineer);
+        collisionsService.assign(id, engineer);
         return "redirect:/collisions/" + id;
     }
 
-    @GetMapping("/search")
-    public String searchPage() {
-        return "collisions/search";
-    }
 
     @PostMapping("/search")
     public String makeSearch(Model model, @RequestParam("query") String query) {
-        model.addAttribute("collisions", collisionService.searchByDiscipline(query));
-        return "collisions/search";
+        model.addAttribute("collisions", collisionsService.searchByDiscipline(query));
+        return "collisions/index";
+    }
+
+    @GetMapping("/{id}/fake")
+    public String markAsFake(@PathVariable("id") int id) {
+        collisionsService.markAsFake(id);
+        return "redirect:/collisions/";
     }
 }

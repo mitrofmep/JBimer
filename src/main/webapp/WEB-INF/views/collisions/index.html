@@ -13,28 +13,43 @@
 <div class="text-center border p-2">
     Collisions on page <span class="badge bg-secondary" th:text="${collisions.size()}"></span>
 </div>
+
 <br/>
-<div class="container" style="max-width: 800px">
-<div class="table-responsive">
-    <table class="table table-striped table-hover">
+<div class="container">
+<div>
+    <table class="table table-bordered">
         <thead>
         <tr>
-            <th style="width: 50px">Discipline 1</th>
-            <th style="width: 100px">Status</th>
-            <th style="width: 200px;">ID Element 1</th>
-            <th style="width: 50px"></th>
-            <th style="width: 200px;">ID Element 2</th>
-            <th style="width: 50px"></th>
+            <th scope="col">Info</th>
+            <th scope="col">Status</th>
+            <th scope="col">Disc-1</th>
+            <th scope="col">Element ID-1</th>
+            <th scope="col">Element Name-1</th>
+            <th scope="col">Disc-2</th>
+            <th scope="col">Element ID-2</th>
+            <th scope="col">Element Name-2</th>
+            <th scope="col">Assigned to</th>
+            <th scope="col">Fake</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="collision : ${collisions}" th:sorted>
-            <td><a th:href="@{/collisions/{id}(id=${collision.getId()})}" class="badge badge-primary" th:text="${collision.getDiscipline1()}"></a></td>
+            <td><a th:href="@{/collisions/{id}(id=${collision.getId()})}" class="btn btn-primary btn-sm" role="button">Open</a></td>
             <td><span th:text="${collision.getStatus()}"></span></td>
-            <td><span th:text="${collision.getElementId1()}"></span></td>
-            <td><button class="btn btn-light btn-sm" onclick="copyToClipboard(this)" th:attr="data-clipboard-text=${collision.getElementId1()}">📋</button></td>
-            <td><span th:text="${collision.getElementId2()}"></span></td>
-            <td><button class="btn btn-light btn-sm" onclick="copyToClipboard(this)" th:attr="data-clipboard-text=${collision.getElementId2()}">📋</button></td>
+            <td><span th:text="${collision.getDiscipline1()}"></span></td>
+            <td><span th:text="${collision.getElementId1()+ '  '}"></span><button class="btn btn-light btn-sm" onclick="copyToClipboard(this)" th:attr="data-clipboard-text=${collision.getElementId1()}">📋</button></td>
+            <td><span th:text="${collision.getElementName1()}"></span></td>
+            <td><span th:text="${collision.getDiscipline2()}"></span></td>
+            <td><span th:text="${collision.getElementId2()+ '  '}"></span><button class="btn btn-light btn-sm" onclick="copyToClipboard(this)" th:attr="data-clipboard-text=${collision.getElementId2()}">📋</button></td>
+            <td><span th:text="${collision.getElementName2()}"></span></td>
+            <td><span th:text="${collision.getEngineer() != null} ? ${collision.getEngineer().getFullNameWithDiscipline()} : 'Свободно'"
+        th:style="${collision.getEngineer() != null} ? '' : 'color:green'"></span>
+            </td>
+            <td><span th:if="${collision.isFake()}" class="text-danger">FAKE</span>
+                <span th:unless="${collision.isFake()}">
+        <a th:href="@{/collisions/{id}/fake(id=${collision.getId()})}" class="btn btn-warning btn-sm" role="button">Mark as fake</a>
+    </span>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -74,5 +89,12 @@
 <a href="/main">Back to main</a>
 <br/>
 <a href="/engineers">All engineers</a>
+
+<form th:method="POST" th:action="@{/collisions/search}">
+    <label for="query">Enter : </label>
+    <input type="text" id="query" name="query"/>
+    <br/>
+    <input type="submit" value="Search!"/>
+</form>
 </body>
 </html>

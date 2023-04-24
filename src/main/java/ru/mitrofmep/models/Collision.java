@@ -45,6 +45,13 @@ public class Collision {
     @Column(name = "comment")
     private String comment;
 
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
+    @Column(name = "fake")
+    private boolean fake;
+
     public Collision(Project projectBase, String discipline1, String discipline2, String elementName1, String elementName2, int elementId1, int elementId2, String status) {
         this.projectBase = projectBase;
         this.discipline1 = discipline1;
@@ -145,6 +152,22 @@ public class Collision {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public boolean isFake() {
+        return fake;
+    }
+
+    public void setFake(boolean fake) {
+        this.fake = fake;
     }
 
     public String getFullInfoString() {

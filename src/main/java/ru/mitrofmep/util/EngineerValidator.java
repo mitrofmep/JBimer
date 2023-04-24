@@ -4,18 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import ru.mitrofmep.dao.EngineerDAO;
 import ru.mitrofmep.models.Engineer;
-import ru.mitrofmep.services.EngineerService;
+import ru.mitrofmep.services.EngineersService;
 
 @Component
 public class EngineerValidator implements Validator {
 
-    private final EngineerService engineerService;
+    private final EngineersService engineersService;
 
     @Autowired
-    public EngineerValidator(EngineerService engineerService) {
-        this.engineerService = engineerService;
+    public EngineerValidator(EngineersService engineersService) {
+        this.engineersService = engineersService;
     }
 
     @Override
@@ -34,9 +33,9 @@ public class EngineerValidator implements Validator {
         if (engineer.getEmail().isEmpty()) errors.rejectValue("email", "", "Field is empty");
 
 
-        if (engineerService.getEngineerByTelegramUsername(engineer.getTelegramUsername()).isPresent())
+        if (engineersService.getEngineerByTelegramUsername(engineer.getTelegramUsername()).isPresent())
             errors.rejectValue("telegramUsername", "", "Engineer with this telegram username is already exist");
-        if (engineerService.getEngineerByEmail(engineer.getEmail()).isPresent())
+        if (engineersService.getEngineerByEmail(engineer.getEmail()).isPresent())
             errors.rejectValue("email", "", "Engineer with this email is already exist");
     }
 }

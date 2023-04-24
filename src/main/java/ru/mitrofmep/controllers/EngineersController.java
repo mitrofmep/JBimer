@@ -5,11 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.mitrofmep.dao.CollisionDAO;
-import ru.mitrofmep.dao.EngineerDAO;
 import ru.mitrofmep.models.Engineer;
-import ru.mitrofmep.services.CollisionService;
-import ru.mitrofmep.services.EngineerService;
+import ru.mitrofmep.services.EngineersService;
 import ru.mitrofmep.util.EngineerValidator;
 
 import javax.validation.Valid;
@@ -17,20 +14,20 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/engineers")
-public class EngineerController {
+public class EngineersController {
 
     private final EngineerValidator engineerValidator;
-    private final EngineerService engineerService;
+    private final EngineersService engineersService;
 
     @Autowired
-    public EngineerController(EngineerValidator engineerValidator,EngineerService engineerService) {
+    public EngineersController(EngineerValidator engineerValidator, EngineersService engineersService) {
         this.engineerValidator = engineerValidator;
-        this.engineerService = engineerService;
+        this.engineersService = engineersService;
     }
 
     @GetMapping()
     public String index(Model model) {
-        List<Engineer> engineers = engineerService.findAllSortedByCollisionsSize();
+        List<Engineer> engineers = engineersService.findAllSortedByCollisionsSize();
 
         model.addAttribute("engineers", engineers);
         return "engineers/index";
@@ -38,7 +35,7 @@ public class EngineerController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        Engineer engineer = engineerService.findOneAndItsCollisions(id);
+        Engineer engineer = engineersService.findOneAndItsCollisions(id);
 
         model.addAttribute("engineer", engineer);
         model.addAttribute("collisions", engineer.getCollisions());
@@ -57,14 +54,14 @@ public class EngineerController {
         engineerValidator.validate(engineer, bindingResult);
 
         if (bindingResult.hasErrors()) return "engineers/new";
-        engineerService.save(engineer);
+        engineersService.save(engineer);
         return "redirect:/engineers";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
 
-        model.addAttribute("engineer", engineerService.findOne(id));
+        model.addAttribute("engineer", engineersService.findOne(id));
         return "engineers/edit";
     }
 
@@ -77,14 +74,14 @@ public class EngineerController {
 
 
         if (bindingResult.hasErrors()) return "engineers/edit";
-        engineerService.update(id, engineer);
+        engineersService.update(id, engineer);
         return "redirect:/engineers";
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
 
-        engineerService.delete(id);
+        engineersService.delete(id);
         return "redirect:/engineers";
         
     }

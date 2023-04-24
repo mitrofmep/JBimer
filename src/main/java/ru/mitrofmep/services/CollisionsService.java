@@ -1,6 +1,5 @@
 package ru.mitrofmep.services;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -11,18 +10,19 @@ import ru.mitrofmep.models.Collision;
 import ru.mitrofmep.models.Engineer;
 import ru.mitrofmep.repositories.CollisionsRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional (readOnly = true)
-public class CollisionService {
+public class CollisionsService {
 
     private final CollisionsRepository collisionsRepository;
     private final CollisionDAO collisionDAO;
 
     @Autowired
-    public CollisionService(CollisionsRepository collisionsRepository, CollisionDAO collisionDAO) {
+    public CollisionsService(CollisionsRepository collisionsRepository, CollisionDAO collisionDAO) {
         this.collisionsRepository = collisionsRepository;
         this.collisionDAO = collisionDAO;
     }
@@ -32,8 +32,12 @@ public class CollisionService {
     }
 
     public List<Collision> findAll() {
-        return collisionsRepository.findAll(Sort.by("discipline1"));
+//        return collisionsRepository.findAll(Sort.by("discipline1"));
+
+        return collisionsRepository.findAllFetchEngineers();
     }
+
+
 
     public Collision findOne(int id) {
         Optional<Collision> foundCollision = collisionsRepository.findById(id);
@@ -49,6 +53,9 @@ public class CollisionService {
 
     @Transactional
     public void save(Collision collision) {
+        collision.setCreatedAt(new Date());
+
+
         collisionsRepository.save(collision);
     }
 
@@ -95,5 +102,14 @@ public class CollisionService {
 
     public List<Collision> searchByDiscipline(String query) {
         return collisionsRepository.findByAnyDiscipline(query);
+    }
+
+    @Transactional
+    public void markAsFake(int id) {
+        collisionsRepository.findById(id).ifPresent(
+                collision -> {
+                    collision.setFake(true);
+                }
+        );
     }
 }
