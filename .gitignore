@@ -3,3 +3,4 @@
 src/main/resources/database.properties
 src/main/resources/hibernate.properties
 src/main/sql/jbimer_db_test_data.sql
+src/main/resources/application.properties
