@@ -15,29 +15,28 @@
 
 ## Stack
 - Java 17
-- Spring
+- Spring (Core, MVC, Boot, Data JPA, Security)
 - Maven
 - PostgreSQL
-- Hibernate
-- Tomcat
+- Hibernate ORM
+- Apache Tomcat
 - JUnit5
 
 ## Installation
 1. Clone the repository to your local machine:
 
-   `git clone https://github.com/mitrofmep/clash-tasker.git`
-2. Make sure you have Java 17, Apache Tomcat and PostgreSQL installed on your machine.
-3. Set DB properties to `database.properties`. As example use `database.properties.origin`
-4. Open a terminal and navigate to the root directory of the project.
-5. Build the project using Maven by running the following command:
+   `git clone https://github.com/mitrofmep/JBimer.git`
+2. Make sure you have Java 17 and PostgreSQL installed on your machine.
+3. Navigate to the `resources` folder in the root directory of the project and run the `.sql` file to create the database tables. Make sure you have the necessary permissions to create the tables.
+4. Set the database properties in the `application.properties` file. You can use the `application.properties.origin` file as an example.
+5. Navigate to the root directory of the project in the terminal.
+6. Build the project using Maven by running the following command:
 
-   `mvn clean package`
-6. After a successful build, locate the `clash-tasker.war` file in the target directory.
-7. Copy the `clash-tasker.war` file to the `webapps` directory of your Tomcat installation.
-8. Start Tomcat by running the following command:
+   `./mvnw clean package`
+7. Run the JAR file using the following command:
 
-   `catalina.sh run`
-9. Open a web browser and navigate to `http://localhost:8080/main` to access the application.
+   `java -jar JBimer.jar`
+8. Open a web browser and navigate to http://localhost:8080/main to access the application.
 
 ## Usage
 1. Open the application
