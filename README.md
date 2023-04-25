@@ -14,7 +14,7 @@
 9. **Image Attachment:** Users can attach images to collision objects, providing a visual aid for resolving the conflicts.
 
 ## Stack
-- Java 11
+- Java 17
 - Spring
 - Maven
 - PostgreSQL
@@ -26,7 +26,7 @@
 1. Clone the repository to your local machine:
 
    `git clone https://github.com/mitrofmep/clash-tasker.git`
-2. Make sure you have Java 11, Apache Tomcat and PostgreSQL installed on your machine.
+2. Make sure you have Java 17, Apache Tomcat and PostgreSQL installed on your machine.
 3. Set DB properties to `database.properties`. As example use `database.properties.origin`
 4. Open a terminal and navigate to the root directory of the project.
 5. Build the project using Maven by running the following command:
