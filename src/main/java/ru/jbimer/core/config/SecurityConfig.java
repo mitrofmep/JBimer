@@ -1,23 +1,54 @@
 package ru.jbimer.core.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
-import ru.jbimer.core.security.AuthProviderImpl;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import ru.jbimer.core.services.EngineerDetailsService;
 
-@EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfiguration {
+@Configuration
+public class SecurityConfig {
 
-    private final AuthProviderImpl authProvider;
+    private final EngineerDetailsService engineerDetailsService;
 
     @Autowired
-    public SecurityConfig(AuthProviderImpl authProvider) {
-        this.authProvider = authProvider;
+    public SecurityConfig(EngineerDetailsService engineerDetailsService) {
+        this.engineerDetailsService = engineerDetailsService;
     }
 
-    // setup authentication
-    protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(authProvider);
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+                .authorizeHttpRequests((requests) -> requests
+//                        .requestMatchers("/", "/main").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin((form) -> form
+                        .loginPage("/auth/login")
+                        .loginProcessingUrl("/process_login")
+                        .defaultSuccessUrl("/collisions", true)
+                        .permitAll()
+                )
+                .logout((logout) -> logout.permitAll());
+
+        return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .userDetailsService(engineerDetailsService)
+                .passwordEncoder(getPasswordEncoder())
+                .and().build();
+    }
+
+    @Bean
+    public PasswordEncoder getPasswordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
     }
 }
