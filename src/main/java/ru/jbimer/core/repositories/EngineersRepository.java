@@ -23,6 +23,8 @@ public interface EngineersRepository extends JpaRepository<Engineer, Integer> {
 
     Optional<Engineer> findByEmail(String email);
 
+    Optional<Engineer> findByUsername(String username);
+
     @Query("SELECT e FROM Engineer e LEFT JOIN FETCH e.collisions WHERE e.id = :id")
     Optional<Engineer> findByIdFetchCollisions(@Param("id") int id);
 }

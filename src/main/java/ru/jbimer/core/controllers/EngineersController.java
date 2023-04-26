@@ -2,10 +2,13 @@ package ru.jbimer.core.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.jbimer.core.security.EngineerDetails;
 import ru.jbimer.core.util.EngineerValidator;
 import ru.jbimer.core.models.Engineer;
 import ru.jbimer.core.services.EngineersService;
@@ -85,4 +88,14 @@ public class EngineersController {
         return "redirect:/engineers";
         
     }
+
+    @GetMapping("/showUserInfo")
+    public String showUserInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        EngineerDetails engineerDetails = (EngineerDetails) authentication.getPrincipal();
+        System.out.println(engineerDetails.getEngineer().getFullNameWithDiscipline());
+
+        return "redirect:/engineers";
+    }
+
 }

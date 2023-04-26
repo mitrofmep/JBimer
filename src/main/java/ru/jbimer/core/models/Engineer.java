@@ -41,6 +41,12 @@ public class Engineer {
     @Column(name = "telegram_username")
     private String telegramUsername;
 
+    @Column(name = "username")
+    private String username;
+
+    @Column(name = "password")
+    private String password;
+
     @ManyToMany(mappedBy = "engineersOnProject", fetch = FetchType.LAZY)
     private List<Project> projects;
 
@@ -104,6 +110,22 @@ public class Engineer {
 
     public void setTelegramUsername(String tgUsername) {
         this.telegramUsername = tgUsername;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public List<Project> getProjects() {

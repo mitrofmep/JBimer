@@ -2,18 +2,22 @@ package ru.jbimer.core.services;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.jbimer.core.dao.EngineerDAO;
 import ru.jbimer.core.models.Collision;
 import ru.jbimer.core.repositories.EngineersRepository;
 import ru.jbimer.core.models.Engineer;
+import ru.jbimer.core.security.EngineerDetails;
 
 import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
-public class EngineersService {
+public class EngineersService{
 
     private final EngineersRepository engineersRepository;
     private final EngineerDAO engineerDAO;
@@ -95,4 +99,6 @@ public class EngineersService {
             return Collections.emptyList();
         }
     }
+
+
 }
