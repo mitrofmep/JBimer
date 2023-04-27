@@ -18,32 +18,33 @@ public class Engineer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotNull(message = "Field is empty")
-    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
+    @Size(min = 1, max = 30, message = "Field is empty")
     @Column(name = "first_name")
     private String firstName;
 
-    @NotNull(message = "Field is empty")
+    @Size(min = 1, max = 30, message = "Field is empty")
     @Column(name = "last_name")
     private String lastName;
 
-    @NotNull(message = "Field is empty")
+    @Size(min = 1, max = 30, message = "Field is empty")
     @Pattern(regexp = "\\D+",
             message = "Enter correct name of service, ex. OV")
     @Column(name = "discipline")
     private String discipline;
 
-    @NotNull (message = "Field is empty")
+    @Size(min = 1, max = 30, message = "Field is empty")
     @Column(name = "email")
     private String email;
 
-    @NotNull (message = "Field is empty")
+    @Size(min = 1, max = 30, message = "Field is empty")
     @Column(name = "telegram_username")
     private String telegramUsername;
 
+    @Size(min = 1, max = 30, message = "Field is empty")
     @Column(name = "username")
     private String username;
 
+    @Size(min = 1, max = 30, message = "Field is empty")
     @Column(name = "password")
     private String password;
 

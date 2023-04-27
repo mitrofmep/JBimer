@@ -3,18 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Add engineer</title>
-<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">-->
+    <title>Registration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
 </head>
 <body>
-<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
 <br/>
 <div class="container-fluid d-flex align-items-center justify-content-center">
     <div class="card col-10 col-md-6 col-lg-4">
         <div class="card-body">
-<form th:method="POST" th:action="@{/engineers}" th:object="${engineer}" class="mx-auto">
-    <div class="text-center border py-2 mb-3">
-        <h6 class="mb-0">Add new engineer</h6>
+<form th:method="POST" th:action="@{/auth/registration}" th:object="${engineer}" class="mx-auto">
+<!--    <div class="text-center border py-2 mb-3">-->
+<!--        <h6 class="mb-0">Add new engineer</h6>-->
+<!--    </div>-->
+    <div class="form-group">
+        <label for="username">Enter username: </label>
+        <input type="text" class="form-control" th:field="*{username}" id="username"/>
+        <div style="color:red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">firstName error</div>
+    </div>
+    <div class="form-group">
+        <label for="password">Enter password: </label>
+        <input type="password" class="form-control" th:field="*{password}" id="password"/>
+        <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">firstName error</div>
     </div>
     <div class="form-group">
         <label for="firstName">First name: </label>
@@ -47,7 +57,7 @@
         <div style="color:red" th:if="${#fields.hasErrors('telegramUsername')}" th:errors="*{telegramUsername}">telegramUsername error</div>
     </div>
     <br/>
-    <input type="submit" class="btn btn-primary" value="Add"/>
+    <input type="submit" class="btn btn-primary" value="Sign up!"/>
 </form>
         </div>
     </div>

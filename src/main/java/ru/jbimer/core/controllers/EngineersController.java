@@ -38,7 +38,7 @@ public class EngineersController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        Engineer engineer = engineersService.findOneAndItsCollisions(id);
+        Engineer engineer = engineersService.findByIdFetchCollisions(id);
 
         model.addAttribute("engineer", engineer);
         model.addAttribute("collisions", engineer.getCollisions());
