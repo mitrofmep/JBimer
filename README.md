@@ -36,7 +36,7 @@
 7. Run the JAR file using the following command:
 
    `java -jar JBimer.jar`
-8. Open a web browser and navigate to http://localhost:8080/main to access the application.
+8. Open a web browser and navigate to `http://localhost:8080/` to access the application.
 
 ## Usage
 1. Open the application
