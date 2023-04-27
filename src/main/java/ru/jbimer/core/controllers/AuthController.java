@@ -39,7 +39,7 @@ public class AuthController {
         engineerValidator.validate(engineer, bindingResult);
 
         if (bindingResult.hasErrors()) return "auth/registration";
-        engineersService.save(engineer);
+        engineersService.register(engineer);
 
         return "redirect:/auth/login";
     }

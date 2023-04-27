@@ -2,6 +2,7 @@ package ru.jbimer.core.services;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.jbimer.core.dao.EngineerDAO;
@@ -17,11 +18,13 @@ public class EngineersService{
 
     private final EngineersRepository engineersRepository;
     private final EngineerDAO engineerDAO;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public EngineersService(EngineersRepository engineersRepository, EngineerDAO engineerDAO) {
+    public EngineersService(EngineersRepository engineersRepository, EngineerDAO engineerDAO, PasswordEncoder passwordEncoder) {
         this.engineersRepository = engineersRepository;
         this.engineerDAO = engineerDAO;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Optional<Engineer> findByUsername(String username) {
@@ -68,7 +71,9 @@ public class EngineersService{
     }
 
     @Transactional
-    public void save(Engineer engineer) {
+    public void register(Engineer engineer) {
+        engineer.setPassword(passwordEncoder.encode(engineer.getPassword()));
+
         engineersRepository.save(engineer);
     }
 

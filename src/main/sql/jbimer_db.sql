@@ -5,7 +5,9 @@ create table Engineer
     last_name         varchar(100) not null,
     discipline        varchar(20)  not null,
     email             varchar(100) not null unique,
-    telegram_username varchar(50) unique
+    telegram_username varchar(50) unique,
+    username varchar unique,
+    password varchar
 );
 
 create table Project

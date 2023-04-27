@@ -57,7 +57,7 @@ public class EngineersController {
         engineerValidator.validate(engineer, bindingResult);
 
         if (bindingResult.hasErrors()) return "engineers/new";
-        engineersService.save(engineer);
+        engineersService.register(engineer);
         return "redirect:/engineers";
     }
 

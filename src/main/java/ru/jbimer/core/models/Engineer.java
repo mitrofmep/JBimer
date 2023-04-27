@@ -44,7 +44,7 @@ public class Engineer {
     @Column(name = "username")
     private String username;
 
-    @Size(min = 1, max = 30, message = "Field is empty")
+    @Size(min = 1, message = "Field is empty")
     @Column(name = "password")
     private String password;
 
