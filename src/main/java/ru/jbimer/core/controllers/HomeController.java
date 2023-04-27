@@ -1,8 +1,13 @@
 package ru.jbimer.core.controllers;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.jbimer.core.models.Engineer;
+import ru.jbimer.core.security.EngineerDetails;
 import ru.jbimer.core.services.CollisionsService;
 import ru.jbimer.core.services.EngineersService;
 
@@ -22,5 +27,24 @@ public class HomeController {
         model.addAttribute("engineers", engineersService.findAll());
         model.addAttribute("collisions", collisionsService.findAll());
         return "index_main";
+    }
+
+    @GetMapping("/account")
+    public String showUserAccount(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        EngineerDetails engineerDetails = (EngineerDetails) authentication.getPrincipal();
+
+        Engineer engineer = engineersService
+                .findByIdFetchCollisions(engineerDetails.getEngineer().getId());
+
+        model.addAttribute("engineer", engineer);
+        model.addAttribute("collisions", engineer.getCollisions());
+
+        return "/profile_page";
+    }
+
+    @GetMapping("/admin")
+    public String adminPage() {
+        return "admin";
     }
 }

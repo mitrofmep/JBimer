@@ -45,21 +45,23 @@ public class EngineersController {
         return "engineers/show";
     }
 
-    @GetMapping("/new")
-    public String newEngineer(@ModelAttribute("engineer") Engineer engineer) {
-        return "engineers/new";
-    }
 
-    @PostMapping()
-    public String create(@ModelAttribute("engineer") @Valid Engineer engineer,
-                         BindingResult bindingResult) {
 
-        engineerValidator.validate(engineer, bindingResult);
+//    @GetMapping("/new")
+//    public String newEngineer(@ModelAttribute("engineer") Engineer engineer) {
+//        return "engineers/new";
+//    }
 
-        if (bindingResult.hasErrors()) return "engineers/new";
-        engineersService.register(engineer);
-        return "redirect:/engineers";
-    }
+//    @PostMapping()
+//    public String create(@ModelAttribute("engineer") @Valid Engineer engineer,
+//                         BindingResult bindingResult) {
+//
+//        engineerValidator.validate(engineer, bindingResult);
+//
+//        if (bindingResult.hasErrors()) return "engineers/new";
+//        engineersService.register(engineer);
+//        return "redirect:/engineers";
+//    }
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
@@ -89,13 +91,6 @@ public class EngineersController {
         
     }
 
-    @GetMapping("/showUserInfo")
-    public String showUserInfo() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        EngineerDetails engineerDetails = (EngineerDetails) authentication.getPrincipal();
-        System.out.println(engineerDetails.getEngineer().getFullNameWithDiscipline());
 
-        return "redirect:/engineers";
-    }
 
 }

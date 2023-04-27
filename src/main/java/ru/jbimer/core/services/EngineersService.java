@@ -2,6 +2,7 @@ package ru.jbimer.core.services;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,6 +74,7 @@ public class EngineersService{
     @Transactional
     public void register(Engineer engineer) {
         engineer.setPassword(passwordEncoder.encode(engineer.getPassword()));
+        engineer.setRole("ROLE_USER");
 
         engineersRepository.save(engineer);
     }
