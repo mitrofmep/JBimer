@@ -18,8 +18,9 @@
   </button>
 </div>
 <br/>
-<button type="button" class="btn btn-danger" onclick="location.href='/logout'">Exit</button>
-
+<form th:action="@{/logout}" th:method="POST">
+  <input type="submit" value="Logout">
+</form>
 
 </body>
 </html>
