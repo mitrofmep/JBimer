@@ -80,9 +80,12 @@ public class EngineersService{
     }
 
     @Transactional
-    public void update(int id, Engineer updatedEngineer) {
-        updatedEngineer.setId(id);
-        engineersRepository.save(updatedEngineer);
+    public void update(int id, Engineer updatedEngineer, Engineer originalEngineer) {
+        originalEngineer.setDiscipline(updatedEngineer.getDiscipline());
+        originalEngineer.setFirstName(updatedEngineer.getFirstName());
+        originalEngineer.setLastName(updatedEngineer.getLastName());
+
+        engineersRepository.save(originalEngineer);
     }
 
     @Transactional

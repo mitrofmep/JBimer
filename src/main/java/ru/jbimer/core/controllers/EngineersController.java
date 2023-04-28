@@ -71,15 +71,18 @@ public class EngineersController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("engineer") @Valid Engineer engineer,
+    public String update(@ModelAttribute("engineer") @Valid Engineer updatedEngineer,
                          BindingResult bindingResult,
                          @PathVariable("id") int id) {
 
-        engineerValidator.validate(engineer, bindingResult);
+//        engineerValidator.validate(engineer, bindingResult);
 
 
         if (bindingResult.hasErrors()) return "engineers/edit";
-        engineersService.update(id, engineer);
+
+        Engineer originalEngineer = engineersService.findOne(id);
+
+        engineersService.update(id, updatedEngineer, originalEngineer);
         return "redirect:/engineers";
     }
 
