@@ -19,7 +19,6 @@
 - Maven
 - PostgreSQL
 - Hibernate ORM
-- Apache Tomcat
 - JUnit5
 
 ## Installation
