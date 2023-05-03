@@ -90,8 +90,14 @@ public class EngineersController {
     public String delete(@PathVariable("id") int id) {
 
         engineersService.delete(id);
-        return "redirect:/engineers";
-        
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            // Invalidate the user's session and clear the SecurityContextHolder
+            SecurityContextHolder.getContext().setAuthentication(null);
+        }
+        return "redirect:/logout";
+
     }
 
 

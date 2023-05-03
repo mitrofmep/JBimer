@@ -36,7 +36,7 @@
             <form th:method="POST" action="/process_login" class="mx-auto">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                     <div class="text-center border py-2 mb-3">
-                        <h6 class="mb-0">Sign in</h6>
+                        <h6 class="mb-0">Sign in page</h6>
                     </div>
                 <div th:if="${param.error}" style="color: red">
                     Invalid username and password.
@@ -51,6 +51,7 @@
                 </div>
                 <br/>
                 <input type="submit" class="btn btn-primary" value="Sign in"/>
+                <button class="btn btn-primary" type="button" onclick="location.href='/auth/registration'">Register</button>
             </form>
         </div>
     </div>
