@@ -57,6 +57,9 @@ public class Engineer {
     @OneToMany(mappedBy = "engineer", fetch = FetchType.LAZY)
     private List<Collision> collisions;
 
+    @OneToMany(mappedBy = "engineer", fetch = FetchType.LAZY)
+    private List<HtmlReportData> reports;
+
     public Engineer() {
     }
 
