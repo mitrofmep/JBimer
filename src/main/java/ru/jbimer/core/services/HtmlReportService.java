@@ -20,13 +20,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class StorageService {
+public class HtmlReportService {
 
     private final StorageRepository storageRepository;
     private final CollisionsRepository collisionsRepository;
 
     @Autowired
-    public StorageService(StorageRepository storageRepository, CollisionsRepository collisionsRepository) {
+    public HtmlReportService(StorageRepository storageRepository, CollisionsRepository collisionsRepository) {
         this.storageRepository = storageRepository;
         this.collisionsRepository = collisionsRepository;
     }

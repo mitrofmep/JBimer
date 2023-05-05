@@ -2,6 +2,10 @@ package ru.jbimer.core.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,6 +14,9 @@ import ru.jbimer.core.models.Collision;
 import ru.jbimer.core.models.Engineer;
 import ru.jbimer.core.services.CollisionsService;
 import ru.jbimer.core.services.EngineersService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -27,14 +34,33 @@ public class CollisionsController {
 
     @GetMapping()
     public String index(Model model,
-                        @RequestParam(value = "page", required = false) Integer page,
-                        @RequestParam(value = "collisions_per_page", required = false) Integer collisionsPerPage) {
-        if (page == null || collisionsPerPage == null)
-            model.addAttribute("collisions", collisionsService.findAll());
-        else
-            model.addAttribute("collisions", collisionsService.findWithPagination(page, collisionsPerPage));
+                        @RequestParam(required = false) String keyword,
+                        @RequestParam(defaultValue = "1") Integer page,
+                        @RequestParam(defaultValue = "10") Integer size) {
 
-//        model.addAttribute("engineers", engineerService.findAll());
+        try {
+            List<Collision> collisions = new ArrayList<>();
+            Pageable paging = PageRequest.of(page - 1, size, Sort.by("id"));
+
+            Page<Collision> collisionPage;
+            if (keyword == null) {
+                collisionPage = collisionsService.findAllWithPagination(paging);
+            } else {
+                collisionPage = collisionsService.searchByDiscipline(keyword, paging);
+                model.addAttribute("keyword", keyword);
+            }
+
+            collisions = collisionPage.getContent();
+
+            model.addAttribute("collisions", collisions);
+            model.addAttribute("currentPage", collisionPage.getNumber() + 1);
+            model.addAttribute("totalItems", collisionPage.getTotalElements());
+            model.addAttribute("totalPages", collisionPage.getTotalPages());
+            model.addAttribute("pageSize", size);
+        } catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
+        }
+
         return "collisions/index";
     }
 
@@ -110,15 +136,21 @@ public class CollisionsController {
     }
 
 
-    @PostMapping("/search")
-    public String makeSearch(Model model, @RequestParam("query") String query) {
-        model.addAttribute("collisions", collisionsService.searchByDiscipline(query));
-        return "collisions/index";
-    }
+//    @PostMapping("/search")
+//    public String makeSearch(Model model, @RequestParam("query") String query) {
+//        model.addAttribute("collisions", collisionsService.fi(query));
+//        return "collisions/index";
+//    }
 
     @GetMapping("/{id}/fake")
     public String markAsFake(@PathVariable("id") int id) {
         collisionsService.markAsFake(id);
+        return "redirect:/collisions";
+    }
+
+    @GetMapping("/{id}/not-fake")
+    public String markAsNotFake(@PathVariable("id") int id) {
+        collisionsService.markAsNotFake(id);
         return "redirect:/collisions";
     }
 }

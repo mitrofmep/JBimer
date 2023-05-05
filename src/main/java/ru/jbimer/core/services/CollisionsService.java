@@ -1,7 +1,10 @@
 package ru.jbimer.core.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.jbimer.core.dao.CollisionDAO;
@@ -31,11 +34,9 @@ public class CollisionsService {
     }
 
     public List<Collision> findAll() {
-//        return collisionsRepository.findAll(Sort.by("discipline1"));
 
         return collisionsRepository.findAllFetchEngineers();
     }
-
 
 
     public Collision findOne(int id) {
@@ -95,12 +96,13 @@ public class CollisionsService {
         return collisionsRepository.findById(id).map(Collision::getEngineer).orElse(null);
     }
 
-    public List<Collision> findWithPagination(Integer page, Integer collisionsPerPage) {
-        return collisionsRepository.findAll(PageRequest.of(page, collisionsPerPage)).getContent();
+    public Page<Collision> findAllWithPagination(Pageable paging) {
+        return collisionsRepository.findAll(paging);
     }
 
-    public List<Collision> searchByDiscipline(String query) {
-        return collisionsRepository.findByAnyDiscipline(query);
+    public Page<Collision> searchByDiscipline(String keyword, Pageable pageable) {
+        return collisionsRepository
+                .findByDiscipline1ContainingIgnoreCaseOrDiscipline2ContainingIgnoreCaseOrderById(keyword, keyword, pageable);
     }
 
     @Transactional
@@ -108,6 +110,15 @@ public class CollisionsService {
         collisionsRepository.findById(id).ifPresent(
                 collision -> {
                     collision.setFake(true);
+                }
+        );
+    }
+
+    @Transactional
+    public void markAsNotFake(int id) {
+        collisionsRepository.findById(id).ifPresent(
+                collision -> {
+                    collision.setFake(false);
                 }
         );
     }

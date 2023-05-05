@@ -5,6 +5,8 @@
     <title>Collision page</title>
 </head>
 <body>
+<div th:replace="fragments/header :: header"></div>
+
 
 <div th:if="${owner}">
     <span>Now assigned to: </span> <span th:text="${owner.getFirstName() + ' ' + owner.getLastName() + ' ' + owner.getDiscipline()}">Engineer</span>
@@ -42,9 +44,7 @@
     <input type="submit" value="Remove">
 </form>
 
-<a href="/collisions">All collisions</a>
-
-
+<div th:replace="fragments/footer :: footer"></div>
 
 </body>
 </html>

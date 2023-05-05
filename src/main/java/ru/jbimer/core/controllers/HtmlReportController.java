@@ -1,6 +1,5 @@
 package ru.jbimer.core.controllers;
 
-import jakarta.persistence.GeneratedValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -8,26 +7,25 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.jbimer.core.security.EngineerDetails;
-import ru.jbimer.core.services.EngineerDetailsService;
-import ru.jbimer.core.services.StorageService;
+import ru.jbimer.core.services.HtmlReportService;
 
 import java.io.IOException;
 
 @Controller
-@RequestMapping("/file")
+@RequestMapping("/files")
 public class HtmlReportController {
 
-    private final StorageService service;
+    private final HtmlReportService service;
 
     @Autowired
-    public HtmlReportController(StorageService service) {
+    public HtmlReportController(HtmlReportService service) {
         this.service = service;
     }
 
     @GetMapping
     public String index() {
 
-        return "files/index";
+        return "files/upload";
     }
 
     @PostMapping
@@ -36,6 +34,6 @@ public class HtmlReportController {
         EngineerDetails engineerDetails = (EngineerDetails) authentication.getPrincipal();
         service.uploadFile(file, engineerDetails.getEngineer());
 
-        return "files/index";
+        return "redirect:/collisions";
     }
 }
