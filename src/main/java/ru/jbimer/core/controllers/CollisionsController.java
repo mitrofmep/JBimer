@@ -1,20 +1,24 @@
 package ru.jbimer.core.controllers;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.jbimer.core.models.Collision;
 import ru.jbimer.core.models.Engineer;
+import ru.jbimer.core.security.EngineerDetails;
 import ru.jbimer.core.services.CollisionsService;
 import ru.jbimer.core.services.EngineersService;
+import ru.jbimer.core.services.HtmlReportService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,11 +29,13 @@ public class CollisionsController {
 
     private final EngineersService engineersService;
     private final CollisionsService collisionsService;
+    private final HtmlReportService service;
 
     @Autowired
-    public CollisionsController(EngineersService engineersService, CollisionsService collisionsService) {
+    public CollisionsController(EngineersService engineersService, CollisionsService collisionsService, HtmlReportService service) {
         this.engineersService = engineersService;
         this.collisionsService = collisionsService;
+        this.service = service;
     }
 
     @GetMapping()
@@ -82,18 +88,17 @@ public class CollisionsController {
         return "collisions/show";
     }
 
-    @GetMapping("/new")
-    public String newCollision(@ModelAttribute("collision") Collision collision) {
-        return "collisions/new";
+    @GetMapping("/upload")
+    public String uploadCollisionsReportPage() {
+        return "collisions/upload";
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("collision") @Valid Collision collision,
-                         BindingResult bindingResult) {
+    public String upload(@RequestParam("file") MultipartFile file) throws IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        EngineerDetails engineerDetails = (EngineerDetails) authentication.getPrincipal();
+        service.uploadFile(file, engineerDetails.getEngineer());
 
-
-        if (bindingResult.hasErrors()) return "collisions/new";
-        collisionsService.save(collision);
         return "redirect:/collisions";
     }
 

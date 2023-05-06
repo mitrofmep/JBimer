@@ -15,7 +15,9 @@ import ru.jbimer.core.repositories.StorageRepository;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,11 +26,13 @@ public class HtmlReportService {
 
     private final StorageRepository storageRepository;
     private final CollisionsRepository collisionsRepository;
+    private final CollisionsService collisionsService;
 
     @Autowired
-    public HtmlReportService(StorageRepository storageRepository, CollisionsRepository collisionsRepository) {
+    public HtmlReportService(StorageRepository storageRepository, CollisionsRepository collisionsRepository, CollisionsService collisionsService) {
         this.storageRepository = storageRepository;
         this.collisionsRepository = collisionsRepository;
+        this.collisionsService = collisionsService;
     }
 
 
@@ -47,12 +51,15 @@ public class HtmlReportService {
 
         storageRepository.save(data);
 
-        parse(doc, file.getOriginalFilename());
+        List<Collision> collisions = parse(doc, file.getOriginalFilename());
+
+        collisionsService.saveAll(collisions);
     }
 
-    @Transactional
-    public void parse(Document doc, String filename) {
+    private List<Collision> parse(Document doc, String filename) {
         String regexDisciplines = "^(\\p{L}+)-(\\p{L}+)\\.html$";
+
+        List<Collision> collisionList = new ArrayList<>();
 
         Pattern pattern = Pattern.compile(regexDisciplines);
         Matcher matcher = pattern.matcher(filename);
@@ -95,9 +102,9 @@ public class HtmlReportService {
                         .status("Активно")
                         .createdAt(new Date())
                         .build();
-                collisionsRepository.save(collision);
+                collisionList.add(collision);
             }
-
         }
+        return collisionList;
     }
 }

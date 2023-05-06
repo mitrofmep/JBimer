@@ -60,6 +60,11 @@ public class CollisionsService {
     }
 
     @Transactional
+    public void saveAll(List<Collision> collisions) {
+        collisionsRepository.saveAll(collisions);
+    }
+
+    @Transactional
     public void update(int id, Collision updatedCollision) {
         Collision collisionToBeUpdated = collisionsRepository.findById(id).get();
 
