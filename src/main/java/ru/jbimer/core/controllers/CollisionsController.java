@@ -150,12 +150,12 @@ public class CollisionsController {
     @GetMapping("/{id}/fake")
     public String markAsFake(@PathVariable("id") int id) {
         collisionsService.markAsFake(id);
-        return "redirect:/collisions";
+        return "redirect:/collisions/" + id;
     }
 
     @GetMapping("/{id}/not-fake")
     public String markAsNotFake(@PathVariable("id") int id) {
         collisionsService.markAsNotFake(id);
-        return "redirect:/collisions";
+        return "redirect:/collisions/" + id;
     }
 }

@@ -48,3 +48,28 @@
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
 }
+
+table {
+    line-height: 20px;
+    font-size: medium;
+}
+
+.btn-table {
+    background-color: #afbdcc; /* Blue background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    /*padding: 2px 2px; !* Some padding *!*/
+    font-size: smaller; /* Set a font size */
+    cursor: pointer;
+    border-radius: 5px;
+    font-palette: dark;
+}
+
+/* Darker background on mouse-over */
+.btn:hover {
+    background-color: RoyalBlue;
+}
+
+tr {
+    height: 50px; /* Задаем высоту строки */
+}
