@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "Collision")
@@ -22,7 +24,7 @@ public class Collision {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     private Project projectBase;
 
@@ -60,6 +62,11 @@ public class Collision {
 
     @Column(name = "fake")
     private boolean fake;
+
+    public List<String> getComments() {
+        if (comment == null) return null;
+        else return List.of(comment.split("#@"));
+    }
 
 
     public String getFullInfoString() {

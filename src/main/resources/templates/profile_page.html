@@ -26,7 +26,9 @@
             <p th:text="${'Discipline: ' + engineer.getDiscipline()}" class="text-muted mb-1"></p>
             <br/>
             <div class="d-flex justify-content-center mb-2">
-              <button type="button" class="btn btn-outline-primary ms-1"><a th:href="@{/engineers/{id}/edit(id=${engineer.getId()})}">Edit info</a></button>
+              <form th:action="@{/engineers/{id}/edit(id=${engineer.getId()})}" method="get">
+                <button class="btn btn-outline-primary ms-1" type="submit">Edit info</button>
+              </form>
               <form th:method="DELETE" th:action="@{/engineers/{id}(id=${engineer.getId()})}">
                 <button type="submit" class="btn btn-danger ms-1">Delete account</button>
               </form>

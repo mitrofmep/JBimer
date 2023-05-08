@@ -45,7 +45,7 @@ public class CollisionsController {
                         @RequestParam(defaultValue = "10") Integer size) {
 
         try {
-            List<Collision> collisions = new ArrayList<>();
+            List<Collision> collisions;
             Pageable paging = PageRequest.of(page - 1, size, Sort.by("id"));
 
             Page<Collision> collisionPage;
@@ -79,6 +79,7 @@ public class CollisionsController {
         Engineer collisionOwner = collision.getEngineer();
 
         model.addAttribute("collision", collision);
+        model.addAttribute("comments", collision.getComments());
         if (collisionOwner != null){
             model.addAttribute("owner", collisionOwner);
         }
@@ -140,13 +141,6 @@ public class CollisionsController {
         return "redirect:/collisions/" + id;
     }
 
-
-//    @PostMapping("/search")
-//    public String makeSearch(Model model, @RequestParam("query") String query) {
-//        model.addAttribute("collisions", collisionsService.fi(query));
-//        return "collisions/index";
-//    }
-
     @GetMapping("/{id}/fake")
     public String markAsFake(@PathVariable("id") int id) {
         collisionsService.markAsFake(id);
@@ -156,6 +150,16 @@ public class CollisionsController {
     @GetMapping("/{id}/not-fake")
     public String markAsNotFake(@PathVariable("id") int id) {
         collisionsService.markAsNotFake(id);
+        return "redirect:/collisions/" + id;
+    }
+
+    @PostMapping("/{id}/add-comment")
+    public String addComment(@PathVariable("id") int id,
+                             @RequestParam("comment") String comment) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        EngineerDetails engineerDetails = (EngineerDetails) authentication.getPrincipal();
+        collisionsService.addComment(id, engineerDetails.getEngineer(), comment);
+
         return "redirect:/collisions/" + id;
     }
 }

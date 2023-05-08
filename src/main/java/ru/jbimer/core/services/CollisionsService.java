@@ -12,6 +12,7 @@ import ru.jbimer.core.repositories.CollisionsRepository;
 import ru.jbimer.core.models.Collision;
 import ru.jbimer.core.models.Engineer;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -95,6 +96,21 @@ public class CollisionsService {
                     collision.setEngineer(selectedEngineer);
                 }
         );
+    }
+
+    @Transactional
+    public void addComment(int id, Engineer selectedEngineer, String comment) {
+        Optional<Collision> optionalCollision = collisionsRepository.findByIdFetchEngineer(id);
+        if (optionalCollision.isPresent()) {
+            Collision collision = optionalCollision.get();
+            String currComment = collision.getComment();
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm a");
+            String formattedDate = dateFormat.format(currentDate);
+            if (currComment == null) currComment = formattedDate + ": "+ selectedEngineer.getFullNameWithDiscipline() + ": " + comment + "#@";
+            else currComment = currComment + formattedDate + ": " + selectedEngineer.getFullNameWithDiscipline() + ": " + comment + "#@";
+            collision.setComment(currComment);
+        }
     }
 
     public Engineer getCollisionEngineer(int id) {
