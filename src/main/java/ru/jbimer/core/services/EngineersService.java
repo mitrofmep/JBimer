@@ -106,5 +106,9 @@ public class EngineersService{
         }
     }
 
+    @Transactional
+    public void save(Engineer engineer) {
+        engineersRepository.save(engineer);
+    }
 
 }

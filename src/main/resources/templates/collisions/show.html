@@ -53,8 +53,11 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="row" th:if="${engineers != null && !collision.isFake()}">
-                            <span>This collision is available, assign engineer for resolving conflict</span>
+                        <div class="row">
+                            <span>This collision is available</span>
+                        </div>
+                        <div class="row" th:if="${engineers != null && !collision.isFake() && role.equals('ROLE_ADMIN')}">
+                            <span>Assign engineer for resolving conflict</span>
 
                             <form th:method="PATCH" th:action="@{/collisions/{id}/assign(id=${collision.getId()})}">
                                 <label for="engineer">Choose engineer</label>
@@ -68,7 +71,7 @@
                         <div class="row" th:if="${owner != null && !collision.isFake()}">
                             <span>Now assigned to: </span> <span th:text="${owner.getFirstName() + ' ' + owner.getLastName() + ' ' + owner.getDiscipline()}">Engineer</span>
 
-                            <form th:method="PATCH" th:action="@{/collisions/{id}/release(id=${collision.getId()})}">
+                            <form th:if="${role.equals('ROLE_ADMIN')}" th:method="PATCH" th:action="@{/collisions/{id}/release(id=${collision.getId()})}">
                                 <input type="submit" value="Unassign">
                             </form>
                         </div>
