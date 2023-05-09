@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.jbimer.core.models.Collision;
 import ru.jbimer.core.models.Engineer;
+import ru.jbimer.core.models.Project;
 
 import javax.swing.text.html.Option;
 import java.util.Date;
@@ -19,9 +20,13 @@ import java.util.Optional;
 @Repository
 public interface CollisionsRepository extends JpaRepository<Collision, Integer> {
 
-
-    Page<Collision> findByDiscipline1ContainingIgnoreCaseOrDiscipline2ContainingIgnoreCaseOrderById(String keyword1, String keyword2, Pageable pageable);
-
+    @Query("SELECT c FROM Collision c WHERE (c.discipline1 =: disc1 and c.discipline2 = :disc2" +
+            " or c.discipline1 = :disc2 and c.discipline2 = :disc1) and c.projectBase = :project")
+    Page<Collision> findByDisciplinesAndProject(@Param("disc1") String disc1,
+                                                @Param("disc2") String disc2,
+                                                @Param("project") Project project,
+                                                Pageable pageable);
+    
     @Query("SELECT c FROM Collision c LEFT JOIN FETCH c.engineer WHERE c.id = :id")
     Optional<Collision> findByIdFetchEngineer(@Param("id") int id);
 
@@ -42,4 +47,6 @@ public interface CollisionsRepository extends JpaRepository<Collision, Integer> 
     void updateStatus(@Param("currDate") Date date,
                       @Param("disc1") String disc1,
                       @Param("disc2") String disc2);
+
+    Page<Collision> findByProjectBase(Project project, Pageable pageable);
 }

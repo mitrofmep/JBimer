@@ -27,6 +27,12 @@
   <button class="btn btn-primary" type="button" onclick="location.href='/files'">
     Upload report
   </button>
+  <button class="btn btn-primary" type="button" onclick="location.href='/collisions'">
+    Projects <span class="badge text-bg-secondary" th:text="${projects.size()}"></span>
+  </button>
+  <a th:each="project : ${projects}" th:href="@{/projects/{id}(id=${project.id})}">
+    <span class="mr-2" th:text="${project.getName()}"></span>
+  </a>
 </div>
 <br/>
 <form th:action="@{/logout}" th:method="POST">

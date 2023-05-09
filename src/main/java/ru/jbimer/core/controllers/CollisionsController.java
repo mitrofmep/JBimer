@@ -27,7 +27,7 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping("/collisions")
+@RequestMapping("/projects/{project_id}/collisions")
 public class CollisionsController {
 
     private final EngineersService engineersService;
@@ -43,6 +43,7 @@ public class CollisionsController {
 
     @GetMapping()
     public String index(Model model,
+                        @PathVariable("project_id") int project_id,
                         @RequestParam(required = false) String keyword,
                         @RequestParam(defaultValue = "1") Integer page,
                         @RequestParam(defaultValue = "10") Integer size) {
@@ -53,9 +54,9 @@ public class CollisionsController {
 
             Page<Collision> collisionPage;
             if (keyword == null) {
-                collisionPage = collisionsService.findAllWithPagination(paging);
+                collisionPage = collisionsService.findAllWithPagination(project_id, paging);
             } else {
-                collisionPage = collisionsService.searchByDiscipline(keyword, paging);
+                collisionPage = collisionsService.searchByDiscipline(keyword, project_id, paging);
                 model.addAttribute("keyword", keyword);
             }
 

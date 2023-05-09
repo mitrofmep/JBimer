@@ -2,12 +2,11 @@ package ru.jbimer.core.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.jbimer.core.dao.CollisionDAO;
+import ru.jbimer.core.models.Project;
 import ru.jbimer.core.repositories.CollisionsRepository;
 import ru.jbimer.core.models.Collision;
 import ru.jbimer.core.models.Engineer;
@@ -23,11 +22,13 @@ public class CollisionsService {
 
     private final CollisionsRepository collisionsRepository;
     private final CollisionDAO collisionDAO;
+    private final ProjectService projectService;
 
     @Autowired
-    public CollisionsService(CollisionsRepository collisionsRepository, CollisionDAO collisionDAO) {
+    public CollisionsService(CollisionsRepository collisionsRepository, CollisionDAO collisionDAO, ProjectService projectService) {
         this.collisionsRepository = collisionsRepository;
         this.collisionDAO = collisionDAO;
+        this.projectService = projectService;
     }
 
     public List<Collision> findByEngineer(Engineer engineer) {
@@ -122,13 +123,14 @@ public class CollisionsService {
         return collisionsRepository.findById(id).map(Collision::getEngineer).orElse(null);
     }
 
-    public Page<Collision> findAllWithPagination(Pageable paging) {
-        return collisionsRepository.findAll(paging);
+    public Page<Collision> findAllWithPagination(int project_id, Pageable paging) {
+        Project foundProject = projectService.findOne(project_id);
+        return collisionsRepository.findByProjectBase(foundProject, paging);
     }
 
-    public Page<Collision> searchByDiscipline(String keyword, Pageable pageable) {
-        return collisionsRepository
-                .findByDiscipline1ContainingIgnoreCaseOrDiscipline2ContainingIgnoreCaseOrderById(keyword, keyword, pageable);
+    public Page<Collision> searchByDiscipline(String keyword, int project_id, Pageable pageable) {
+        Project foundProject = projectService.findOne(project_id);
+        return collisionsRepository.findByDisciplinesAndProject(keyword, keyword, foundProject, pageable);
     }
 
     @Transactional

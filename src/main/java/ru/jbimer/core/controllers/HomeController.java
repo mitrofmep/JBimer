@@ -10,22 +10,26 @@ import ru.jbimer.core.models.Engineer;
 import ru.jbimer.core.security.EngineerDetails;
 import ru.jbimer.core.services.CollisionsService;
 import ru.jbimer.core.services.EngineersService;
+import ru.jbimer.core.services.ProjectService;
 
 @Controller
 public class HomeController {
 
     private final EngineersService engineersService;
     private final CollisionsService collisionsService;
+    private final ProjectService projectService;
 
-    public HomeController(EngineersService engineersService, CollisionsService collisionsService) {
+    public HomeController(EngineersService engineersService, CollisionsService collisionsService, ProjectService projectService) {
         this.engineersService = engineersService;
         this.collisionsService = collisionsService;
+        this.projectService = projectService;
     }
 
     @RequestMapping("/main")
     public String index(Model model) {
         model.addAttribute("engineers", engineersService.findAll());
         model.addAttribute("collisions", collisionsService.findAll());
+        model.addAttribute("projects", projectService.findAll());
         return "index_main";
     }
 
