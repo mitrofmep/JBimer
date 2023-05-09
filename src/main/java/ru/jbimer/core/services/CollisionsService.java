@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional (readOnly = true)
+@Transactional
 public class CollisionsService {
 
     private final CollisionsRepository collisionsRepository;
@@ -54,25 +54,30 @@ public class CollisionsService {
 
     @Transactional
     public void save(Collision collision) {
-        collision.setCreatedAt(new Date());
-
 
         collisionsRepository.save(collision);
     }
 
     @Transactional
     public void saveAll(List<Collision> collisions) {
-        collisionsRepository.saveAll(collisions);
+        String disc1 = collisions.get(0).getDiscipline1();
+        String disc2 = collisions.get(0).getDiscipline2();
+        Date currDate = collisions.get(0).getCreatedAt();
+        for (Collision collision :
+                collisions) {
+            Optional<Collision> foundCollision = collisionsRepository
+                    .findByIdsForValidation(collision.getElementId1(), collision.getElementId2());
+            if (foundCollision.isEmpty()) save(collision);
+            else {
+                foundCollision.get().setCreatedAt(new Date());
+            }
+        }
+        update(currDate, disc1, disc2);
     }
 
     @Transactional
-    public void update(int id, Collision updatedCollision) {
-        Collision collisionToBeUpdated = collisionsRepository.findById(id).get();
-
-        updatedCollision.setId(id);
-        updatedCollision.setEngineer(collisionToBeUpdated.getEngineer());
-
-        collisionsRepository.save(updatedCollision);
+    public void update(Date date, String disc1, String disc2) {
+        collisionsRepository.updateStatus(date, disc1, disc2);
     }
 
     @Transactional

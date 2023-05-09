@@ -5,12 +5,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.jbimer.core.exception.InvalidFileNameException;
 import ru.jbimer.core.models.Collision;
 import ru.jbimer.core.models.Engineer;
 import ru.jbimer.core.security.EngineerDetails;
@@ -90,36 +93,21 @@ public class CollisionsController {
     }
 
     @GetMapping("/upload")
-    public String uploadCollisionsReportPage() {
+    public String uploadCollisionsReportPage(Model model) {
         return "collisions/upload";
     }
 
     @PostMapping()
-    public String upload(@RequestParam("file") MultipartFile file) throws IOException {
+    public String upload(@RequestParam("file") MultipartFile file,
+                         Model model) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         EngineerDetails engineerDetails = (EngineerDetails) authentication.getPrincipal();
-        service.uploadFile(file, engineerDetails.getEngineer());
 
-        return "redirect:/collisions";
+        int collisions = service.uploadFile(file, engineerDetails.getEngineer());
+        model.addAttribute("collisionsUploaded", collisions);
+
+        return "collisions/upload";
     }
-
-//    @GetMapping("/{id}/edit")
-//    public String edit(Model model, @PathVariable("id") int id) {
-//
-//        model.addAttribute("collision", collisionService.findOne(id));
-//        return "collisions/edit";
-//    }
-
-//    @PatchMapping("/{id}")
-//    public String update(@ModelAttribute("collision") @Valid Collision collision,
-//                         BindingResult bindingResult,
-//                         @PathVariable("id") int id) {
-//
-//
-//        if (bindingResult.hasErrors()) return "collisions/edit";
-//        collisionService.update(id, collision);
-//        return String.format("redirect:/collisions/%s", id);
-//    }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {

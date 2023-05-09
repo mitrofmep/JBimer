@@ -6,11 +6,19 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Table(name = "Engineer")
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Engineer {
 
     @Id
@@ -59,105 +67,6 @@ public class Engineer {
 
     @OneToMany(mappedBy = "engineer", fetch = FetchType.LAZY)
     private List<HtmlReportData> reports;
-
-    public Engineer() {
-    }
-
-    public Engineer(String firstName, String lastName, String service, String email, String tgUsername) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.discipline = service;
-        this.email = email;
-        this.telegramUsername = tgUsername;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getDiscipline() {
-        return discipline;
-    }
-
-    public void setDiscipline(String service) {
-        this.discipline = service;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelegramUsername() {
-        return telegramUsername;
-    }
-
-    public void setTelegramUsername(String tgUsername) {
-        this.telegramUsername = tgUsername;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public List<Project> getProjects() {
-        return projects;
-    }
-
-    public void setProjects(List<Project> projects) {
-        this.projects = projects;
-    }
-
-    public List<Collision> getCollisions() {
-        return collisions;
-    }
-
-    public void setCollisions(List<Collision> collisions) {
-        this.collisions = collisions;
-    }
 
     public String getFullNameWithDiscipline() {
         return firstName + ' ' + lastName + '-' + discipline;
