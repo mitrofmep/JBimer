@@ -7,7 +7,8 @@ create table Engineer
     email             varchar(100) not null unique,
     telegram_username varchar(50) unique,
     username varchar unique,
-    password varchar
+    password varchar,
+    role varchar
 );
 
 create table Project

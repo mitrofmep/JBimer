@@ -28,8 +28,8 @@
                             <form th:action="@{/projects/{id}/edit(id=${project.getId()})}" method="get">
                                 <button class="btn btn-outline-primary ms-1" type="submit">Edit info</button>
                             </form>
-                            <form th:method="DELETE" th:action="@{/engineers/{id}(id=${engineer.getId()})}">
-                                <button type="submit" class="btn btn-danger ms-1">Delete account</button>
+                            <form th:method="DELETE" th:action="@{/projects/{id}(id=${project.getId()})}">
+                                <button type="submit" class="btn btn-danger ms-1">Delete project</button>
                             </form>
                         </div>
                     </div>
@@ -40,58 +40,28 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-3">
-                                <p class="mb-0">Full Name</p>
+                                <p class="mb-0">Collisions</p>
                             </div>
                             <div class="col-sm-9">
-                                <p class="text-muted mb-0" th:text="${engineer.getFirstName() + ' ' + engineer.getLastName()}"/>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Discipline</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0" th:text="${engineer.getDiscipline()}"/>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Telegram</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0" th:text="${engineer.getTelegramUsername()}"/>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <p class="mb-0">Email</p>
-                            </div>
-                            <div class="col-sm-9">
-                                <p class="text-muted mb-0" th:text="${engineer.getEmail()}"/>
+                                <p class="text-muted mb-0" th:text="${project.getCollisionsOnProject().size()}"/>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card mb-4">
                     <div class="card-body">
-                        <p class="mb-4" th:text="${'Active collisions: ' + collisions.size()}"/>
-                        <div th:each="collision : ${collisions}">
-                            <button>
-                                <a th:href="@{/collisions/{id}(id=${collision.getId()})}"
-                                   th:text="${collision.getStatus() + ' --- '
-           + collision.getDiscipline1() + '-'
-           + collision.getElementName1() + '-'
-           + collision.getElementId1() + '----'
-           + collision.getDiscipline2() + '-'
-           + collision.getElementName2() + '-'
-           + collision.getElementId2() + '----'}">collision</a>
-                            </button>
+                        <div class="row" th:each="engineer : ${project.getEngineersOnProject()}">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Engineer</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0" th:text="${engineer.getFullNameWithDiscipline()}"/>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+
             </div>
         </div>
     </div>
