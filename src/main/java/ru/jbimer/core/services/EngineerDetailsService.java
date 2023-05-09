@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.jbimer.core.models.Engineer;
 import ru.jbimer.core.repositories.EngineersRepository;
 import ru.jbimer.core.security.EngineerDetails;
@@ -29,4 +30,6 @@ public class EngineerDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         return new EngineerDetails(engineer.get());
     }
+
+
 }

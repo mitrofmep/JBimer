@@ -1,51 +1,159 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
     <title>Collision page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </head>
 <body>
+<div th:replace="fragments/header :: header"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+<section style="background-color: #eee;">
+    <div class="container py-5">
 
-<div th:if="${owner}">
-    <span>Now assigned to: </span> <span th:text="${owner.getFirstName() + ' ' + owner.getLastName() + ' ' + owner.getDiscipline()}">Engineer</span>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+<!--                        <img src="https://www.seekpng.com/png/detail/73-730482_existing-user-default-avatar.png" alt="avatar"-->
+<!--                             class="rounded-circle" style="width: 150px;">-->
+                        <h5 th:text="${'Collision #' + collision.getId()}" class="my-3"></h5>
+                        <p th:text="${'Uploaded: ' + #dates.format(collision.getCreatedAt(), 'dd-MM-yyyy HH:mm a')}" class="text-muted mb-1"></p>
+                        <br/>
+                        <div class="d-flex justify-content-center mb-2">
 
-    <form th:method="PATCH" th:action="@{/collisions/{id}/release(id=${collision.getId()})}">
-        <input type="submit" value="Unassign">
-    </form>
-</div>
+                            <form th:unless="${collision.isFake()}" th:action="@{/collisions/{id}/fake(id=${collision.getId()})}" method="get">
+                                <button class="btn btn-warning ms-1" type="submit">Mark as false</button>
+                            </form>
+                            <form th:if="${collision.isFake()}" th:action="@{/collisions/{id}/not-fake(id=${collision.getId()})}" method="get">
+                                <button class="btn btn-success ms-1" type="submit">Not false</button>
+                            </form>
+                            <form th:method="DELETE" th:action="@{/collisions/{id}(id=${collision.getId()})}">
+                                <input type="submit" class="btn btn-danger ms-1" value="Remove">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Project</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0" th:text="${collision.getProjectBase()}"/>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <span>This collision is available</span>
+                        </div>
+                        <div class="row" th:if="${engineers != null && !collision.isFake() && role.equals('ROLE_ADMIN')}">
+                            <span>Assign engineer for resolving conflict</span>
 
-<div th:if="${engineers}">
-    <span>This collision is available, who should it be assigned to?</span>
+                            <form th:method="PATCH" th:action="@{/collisions/{id}/assign(id=${collision.getId()})}">
+                                <label for="engineer">Choose engineer</label>
+                                <select th:object="${engineer}" th:field="*{id}" id="engineer">
+                                    <option th:each="engineer : ${engineers}" th:value="${engineer.getId()}" th:text="${engineer.getFirstName() + ' ' + engineer.getLastName() + ' ' + engineer.getDiscipline()}">
+                                    </option>
+                                </select>
+                                <input type="submit" value="Assign"/>
+                            </form>
+                        </div>
+                        <div class="row" th:if="${owner != null && !collision.isFake()}">
+                            <span>Now assigned to: </span> <span th:text="${owner.getFirstName() + ' ' + owner.getLastName() + ' ' + owner.getDiscipline()}">Engineer</span>
 
-    <form th:method="PATCH" th:action="@{/collisions/{id}/assign(id=${collision.getId()})}">
-        <label for="engineer">Choose engineer</label>
-        <select th:object="${engineer}" th:field="*{id}" id="engineer">
-            <option th:each="engineer : ${engineers}" th:value="${engineer.getId()}" th:text="${engineer.getFirstName() + ' ' + engineer.getLastName() + ' ' + engineer.getDiscipline()}">
-            </option>
-        </select>
-        <input type="submit" value="Assign"/>
-    </form>
-</div>
-
-
-
-
-<p th:text="${'Status: ' + collision.getStatus()}">VALUE</p>
-<p th:text="${'Discipline: ' + collision.getDiscipline1()}">VALUE</p>
-<p th:text="${'ID Element 1: ' + collision.getElementId1()}">VALUE</p>
-<p th:text="${'ID Element 2: ' + collision.getElementId2()}">VALUE</p>
-<br/>
-<!--<button>-->
-<!--    <a th:href="@{/collisions/{id}/edit(id=${collision.getId()})}">Edit</a>-->
-<!--</button>-->
-<form th:method="DELETE" th:action="@{/collisions/{id}(id=${collision.getId()})}">
-    <input type="submit" value="Remove">
-</form>
-
-<a href="/collisions">All collisions</a>
-
-
-
+                            <form th:if="${role.equals('ROLE_ADMIN')}" th:method="PATCH" th:action="@{/collisions/{id}/release(id=${collision.getId()})}">
+                                <input type="submit" value="Unassign">
+                            </form>
+                        </div>
+                        <div class="row" th:if="${collision.isFake()}">
+                            <p class="font-monospace">This collision is marked as false. No conflict resolution is required</p>
+                        </div>
+                        <hr/>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Discipline #1</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0" th:text="${collision.getDiscipline1()}"/>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Element name #1</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0" th:text="${collision.getElementName1()}"/>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Element ID #1</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0" th:text="${collision.getElementId1()}"/>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Discipline #2</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0" th:text="${collision.getDiscipline2()}"/>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Element name #2</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0" th:text="${collision.getElementName2()}"/>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Element ID #2</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0" th:text="${collision.getElementId2()}"/>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Comments</p>
+                            </div>
+                            <div>
+                                <form method="post" th:action="@{/collisions/{id}/add-comment(id=${collision.getId()})}">
+                                    <input type="text" id="comment" name="comment">
+                                    <input type="submit" value="Submit">
+                                </form>
+                                <div th:each="comment : ${comments}">
+                                    <p class="font-monospace" th:text="${comment}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>
 

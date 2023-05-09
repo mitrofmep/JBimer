@@ -38,28 +38,30 @@ public class EngineersController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        Engineer engineer = engineersService.findOneAndItsCollisions(id);
+        Engineer engineer = engineersService.findByIdFetchCollisions(id);
 
         model.addAttribute("engineer", engineer);
         model.addAttribute("collisions", engineer.getCollisions());
         return "engineers/show";
     }
 
-    @GetMapping("/new")
-    public String newEngineer(@ModelAttribute("engineer") Engineer engineer) {
-        return "engineers/new";
-    }
 
-    @PostMapping()
-    public String create(@ModelAttribute("engineer") @Valid Engineer engineer,
-                         BindingResult bindingResult) {
 
-        engineerValidator.validate(engineer, bindingResult);
+//    @GetMapping("/new")
+//    public String newEngineer(@ModelAttribute("engineer") Engineer engineer) {
+//        return "engineers/new";
+//    }
 
-        if (bindingResult.hasErrors()) return "engineers/new";
-        engineersService.save(engineer);
-        return "redirect:/engineers";
-    }
+//    @PostMapping()
+//    public String create(@ModelAttribute("engineer") @Valid Engineer engineer,
+//                         BindingResult bindingResult) {
+//
+//        engineerValidator.validate(engineer, bindingResult);
+//
+//        if (bindingResult.hasErrors()) return "engineers/new";
+//        engineersService.register(engineer);
+//        return "redirect:/engineers";
+//    }
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
@@ -69,15 +71,18 @@ public class EngineersController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("engineer") @Valid Engineer engineer,
+    public String update(@ModelAttribute("engineer") @Valid Engineer updatedEngineer,
                          BindingResult bindingResult,
                          @PathVariable("id") int id) {
 
-        engineerValidator.validate(engineer, bindingResult);
+//        engineerValidator.validate(engineer, bindingResult);
 
 
         if (bindingResult.hasErrors()) return "engineers/edit";
-        engineersService.update(id, engineer);
+
+        Engineer originalEngineer = engineersService.findOne(id);
+
+        engineersService.update(id, updatedEngineer, originalEngineer);
         return "redirect:/engineers";
     }
 
@@ -85,17 +90,16 @@ public class EngineersController {
     public String delete(@PathVariable("id") int id) {
 
         engineersService.delete(id);
-        return "redirect:/engineers";
-        
-    }
 
-    @GetMapping("/showUserInfo")
-    public String showUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        EngineerDetails engineerDetails = (EngineerDetails) authentication.getPrincipal();
-        System.out.println(engineerDetails.getEngineer().getFullNameWithDiscipline());
+        if (authentication != null && authentication.isAuthenticated()) {
+            // Invalidate the user's session and clear the SecurityContextHolder
+            SecurityContextHolder.getContext().setAuthentication(null);
+        }
+        return "redirect:/logout";
 
-        return "redirect:/engineers";
     }
+
+
 
 }

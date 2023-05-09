@@ -1,10 +1,12 @@
 package ru.jbimer.core.security;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.jbimer.core.models.Engineer;
 
 import java.util.Collection;
+import java.util.Collections;
 
 public class EngineerDetails implements UserDetails {
 
@@ -17,7 +19,7 @@ public class EngineerDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singletonList(new SimpleGrantedAuthority(engineer.getRole()));
     }
 
     @Override

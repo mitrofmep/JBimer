@@ -1,29 +1,34 @@
 package ru.jbimer.core.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.jbimer.core.dao.CollisionDAO;
+import ru.jbimer.core.models.Project;
 import ru.jbimer.core.repositories.CollisionsRepository;
 import ru.jbimer.core.models.Collision;
 import ru.jbimer.core.models.Engineer;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional (readOnly = true)
+@Transactional
 public class CollisionsService {
 
     private final CollisionsRepository collisionsRepository;
     private final CollisionDAO collisionDAO;
+    private final ProjectService projectService;
 
     @Autowired
-    public CollisionsService(CollisionsRepository collisionsRepository, CollisionDAO collisionDAO) {
+    public CollisionsService(CollisionsRepository collisionsRepository, CollisionDAO collisionDAO, ProjectService projectService) {
         this.collisionsRepository = collisionsRepository;
         this.collisionDAO = collisionDAO;
+        this.projectService = projectService;
     }
 
     public List<Collision> findByEngineer(Engineer engineer) {
@@ -31,11 +36,9 @@ public class CollisionsService {
     }
 
     public List<Collision> findAll() {
-//        return collisionsRepository.findAll(Sort.by("discipline1"));
 
         return collisionsRepository.findAllFetchEngineers();
     }
-
 
 
     public Collision findOne(int id) {
@@ -52,20 +55,30 @@ public class CollisionsService {
 
     @Transactional
     public void save(Collision collision) {
-        collision.setCreatedAt(new Date());
-
 
         collisionsRepository.save(collision);
     }
 
     @Transactional
-    public void update(int id, Collision updatedCollision) {
-        Collision collisionToBeUpdated = collisionsRepository.findById(id).get();
+    public void saveAll(List<Collision> collisions) {
+        String disc1 = collisions.get(0).getDiscipline1();
+        String disc2 = collisions.get(0).getDiscipline2();
+        Date currDate = collisions.get(0).getCreatedAt();
+        for (Collision collision :
+                collisions) {
+            Optional<Collision> foundCollision = collisionsRepository
+                    .findByIdsForValidation(collision.getElementId1(), collision.getElementId2());
+            if (foundCollision.isEmpty()) save(collision);
+            else {
+                foundCollision.get().setCreatedAt(new Date());
+            }
+        }
+        update(currDate, disc1, disc2);
+    }
 
-        updatedCollision.setId(id);
-        updatedCollision.setEngineer(collisionToBeUpdated.getEngineer());
-
-        collisionsRepository.save(updatedCollision);
+    @Transactional
+    public void update(Date date, String disc1, String disc2) {
+        collisionsRepository.updateStatus(date, disc1, disc2);
     }
 
     @Transactional
@@ -91,16 +104,33 @@ public class CollisionsService {
         );
     }
 
+    @Transactional
+    public void addComment(int id, Engineer selectedEngineer, String comment) {
+        Optional<Collision> optionalCollision = collisionsRepository.findByIdFetchEngineer(id);
+        if (optionalCollision.isPresent()) {
+            Collision collision = optionalCollision.get();
+            String currComment = collision.getComment();
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm a");
+            String formattedDate = dateFormat.format(currentDate);
+            if (currComment == null) currComment = formattedDate + ": "+ selectedEngineer.getFullNameWithDiscipline() + ": " + comment + "#@";
+            else currComment = currComment + formattedDate + ": " + selectedEngineer.getFullNameWithDiscipline() + ": " + comment + "#@";
+            collision.setComment(currComment);
+        }
+    }
+
     public Engineer getCollisionEngineer(int id) {
         return collisionsRepository.findById(id).map(Collision::getEngineer).orElse(null);
     }
 
-    public List<Collision> findWithPagination(Integer page, Integer collisionsPerPage) {
-        return collisionsRepository.findAll(PageRequest.of(page, collisionsPerPage)).getContent();
+    public Page<Collision> findAllWithPagination(int project_id, Pageable paging) {
+        Project foundProject = projectService.findOne(project_id);
+        return collisionsRepository.findByProjectBase(foundProject, paging);
     }
 
-    public List<Collision> searchByDiscipline(String query) {
-        return collisionsRepository.findByAnyDiscipline(query);
+    public Page<Collision> searchByDiscipline(String keyword, int project_id, Pageable pageable) {
+        Project foundProject = projectService.findOne(project_id);
+        return collisionsRepository.findByDisciplinesAndProject(keyword, keyword, foundProject, pageable);
     }
 
     @Transactional
@@ -108,6 +138,15 @@ public class CollisionsService {
         collisionsRepository.findById(id).ifPresent(
                 collision -> {
                     collision.setFake(true);
+                }
+        );
+    }
+
+    @Transactional
+    public void markAsNotFake(int id) {
+        collisionsRepository.findById(id).ifPresent(
+                collision -> {
+                    collision.setFake(false);
                 }
         );
     }

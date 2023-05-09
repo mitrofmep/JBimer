@@ -2,16 +2,14 @@ package ru.jbimer.core.services;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.jbimer.core.dao.EngineerDAO;
 import ru.jbimer.core.models.Collision;
 import ru.jbimer.core.repositories.EngineersRepository;
 import ru.jbimer.core.models.Engineer;
-import ru.jbimer.core.security.EngineerDetails;
 
 import java.util.*;
 
@@ -21,11 +19,17 @@ public class EngineersService{
 
     private final EngineersRepository engineersRepository;
     private final EngineerDAO engineerDAO;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public EngineersService(EngineersRepository engineersRepository, EngineerDAO engineerDAO) {
+    public EngineersService(EngineersRepository engineersRepository, EngineerDAO engineerDAO, PasswordEncoder passwordEncoder) {
         this.engineersRepository = engineersRepository;
         this.engineerDAO = engineerDAO;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public Optional<Engineer> findByUsername(String username) {
+        return engineersRepository.findByUsername(username);
     }
 
     public List<Engineer> findAll() {
@@ -46,16 +50,12 @@ public class EngineersService{
         return engineers;
     }
 
-    public Optional<Engineer> getEngineerByFullName(String firstName, String lastName) {
-        return engineersRepository.findByFirstNameAndLastName(firstName, lastName);
-    }
 
-
-    public Optional<Engineer> getEngineerByTelegramUsername(String telegramUsername) {
+    public Optional<Engineer> findByTelegramUsername(String telegramUsername) {
         return engineersRepository.findByTelegramUsername(telegramUsername);
     }
 
-    public Optional<Engineer> getEngineerByEmail(String email) {
+    public Optional<Engineer> findByEmail(String email) {
         return engineersRepository.findByEmail(email);
     }
 
@@ -65,21 +65,27 @@ public class EngineersService{
         return foundEngineer.orElse(null);
     }
 
-    public Engineer findOneAndItsCollisions(int id) {
+    public Engineer findByIdFetchCollisions(int id) {
         Optional<Engineer> foundEngineer = engineersRepository.findByIdFetchCollisions(id);
 
         return foundEngineer.orElse(null);
     }
 
     @Transactional
-    public void save(Engineer engineer) {
+    public void register(Engineer engineer) {
+        engineer.setPassword(passwordEncoder.encode(engineer.getPassword()));
+        engineer.setRole("ROLE_USER");
+
         engineersRepository.save(engineer);
     }
 
     @Transactional
-    public void update(int id, Engineer updatedEngineer) {
-        updatedEngineer.setId(id);
-        engineersRepository.save(updatedEngineer);
+    public void update(int id, Engineer updatedEngineer, Engineer originalEngineer) {
+        originalEngineer.setDiscipline(updatedEngineer.getDiscipline());
+        originalEngineer.setFirstName(updatedEngineer.getFirstName());
+        originalEngineer.setLastName(updatedEngineer.getLastName());
+
+        engineersRepository.save(originalEngineer);
     }
 
     @Transactional
@@ -100,5 +106,9 @@ public class EngineersService{
         }
     }
 
+    @Transactional
+    public void save(Engineer engineer) {
+        engineersRepository.save(engineer);
+    }
 
 }

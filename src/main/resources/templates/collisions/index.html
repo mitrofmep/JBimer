@@ -1,67 +1,159 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
     <title>Collisions</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </head>
 <body>
+<div th:replace="~{fragments/header :: header}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
-<br/>
-<div class="text-center border p-2">
-    Collisions on page <span class="badge bg-secondary" th:text="${collisions.size()}"></span>
-</div>
 
 <br/>
-<div class="container">
-<div>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th scope="col">Info</th>
-            <th scope="col">Status</th>
-            <th scope="col">Disc-1</th>
-            <th scope="col">Element ID-1</th>
-            <th scope="col">Element Name-1</th>
-            <th scope="col">Disc-2</th>
-            <th scope="col">Element ID-2</th>
-            <th scope="col">Element Name-2</th>
-            <th scope="col">Assigned to</th>
-            <th scope="col">Fake</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="collision : ${collisions}" th:sorted>
-            <td><a th:href="@{/collisions/{id}(id=${collision.getId()})}" class="btn btn-primary btn-sm" role="button">Open</a></td>
-            <td><span th:text="${collision.getStatus()}"></span></td>
-            <td><span th:text="${collision.getDiscipline1()}"></span></td>
-            <td><span th:text="${collision.getElementId1()+ '  '}"></span><button class="btn btn-light btn-sm" onclick="copyToClipboard(this)" th:attr="data-clipboard-text=${collision.getElementId1()}">📋</button></td>
-            <td><span th:text="${collision.getElementName1()}"></span></td>
-            <td><span th:text="${collision.getDiscipline2()}"></span></td>
-            <td><span th:text="${collision.getElementId2()+ '  '}"></span><button class="btn btn-light btn-sm" onclick="copyToClipboard(this)" th:attr="data-clipboard-text=${collision.getElementId2()}">📋</button></td>
-            <td><span th:text="${collision.getElementName2()}"></span></td>
-            <td><span th:text="${collision.getEngineer() != null} ? ${collision.getEngineer().getFullNameWithDiscipline()} : 'Свободно'"
-        th:style="${collision.getEngineer() != null} ? '' : 'color:green'"></span>
-            </td>
-            <td><span th:if="${collision.isFake()}" class="text-danger">FAKE</span>
-                <span th:unless="${collision.isFake()}">
-        <a th:href="@{/collisions/{id}/fake(id=${collision.getId()})}" class="btn btn-warning btn-sm" role="button">Mark as fake</a>
-    </span>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+<div class="container-fluid" style="max-width: 1500px; margin: 0 auto;">
+    <h2 class="text-center">Collisions</h2>
+
+    <div th:if="${message != null}" class="alert alert-success alert-dismissible fade show text-center message"
+         role="alert">
+        [[${message}]]
+        <button type="button" class="close btn-sm" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+
+    <div class="my-3">
+        <form th:action="@{/collisions}" id="searchForm">
+            <div class="row d-flex">
+                <div class="col-md-6 mt-2">
+                    <div class="search">
+                        <i class="fa fa-search"></i>
+                        <input id="keyword" type="search" name="keyword" th:value="${keyword}"
+                               class="form-control"
+                               placeholder="Enter Discipline">
+                        <button type="submit" class="btn btn-secondary">Search</button>
+                    </div>
+                </div>
+                <div class="col-md-3 input-group mt-2">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="pageSize">Items per page:</label>
+                    </div>
+                    <select form="searchForm" name="size" th:value="${pageSize}" onchange="changePageSize()"
+                            class="size-select"
+                            id="pageSize">
+                        <option th:each="s : ${ {10, 20, 40} }" th:value="${s}" th:text="${s}"
+                                th:selected="${s == pageSize}"></option>
+                    </select>
+                </div>
+<!--                <div class="col-md-1 mt-2">-->
+<!--                    <button id="btnClear" class="btn btn-info">Clear</button>-->
+<!--                </div>-->
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <table class="table table-sm table-bordered">
+            <thead>
+            <tr style="text-align: center; vertical-align: middle">
+                <th class="align-middle">Info</th>
+                <th class="align-middle">Status</th>
+                <th class="align-middle" colspan="3">Element #1 (Discipline, ID, Name)</th>
+                <th class="align-middle" colspan="3">Element #2 (Discipline, ID, Name)</th>
+                <th class="align-middle">Assigned to</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="collision : ${collisions}" th:sorted>
+
+                <td class="align-middle" style="text-align: center">
+                    <a th:href="@{/collisions/{id}(id=${collision.getId()})}">
+                        <button class="btn-table">
+                            <i class="fa fa-folder"></i>
+                        </button>
+                    </a>
+                </td>
+                <td class="align-middle" style="text-align: center" th:text="${collision.getStatus()}"/>
+                <td class="align-middle" style="text-align: center" th:text="${collision.getDiscipline1()}"/>
+                <td class="align-middle text-center">
+                    <div class="d-flex align-items-center">
+                        <span th:text="${collision.getElementId1()}"></span>
+                        <button class="btn-table ml-1" onclick="copyToClipboard(this)"
+                                th:attr="data-clipboard-text=${collision.getElementId1()}">📋
+                        </button>
+                    </div>
+                </td>
+                <td class="align-middle"><span th:text="${collision.getElementName1()}"></span></td>
+                <td class="align-middle" style="text-align: center" th:text="${collision.getDiscipline2()}"/>
+                <td class="align-middle text-center">
+                    <div class="d-flex align-items-center">
+                        <span th:text="${collision.getElementId2()}"></span>
+                        <button class="btn-table ml-1" onclick="copyToClipboard(this)"
+                                th:attr="data-clipboard-text=${collision.getElementId2()}">📋
+                        </button>
+                    </div>
+                </td>
+                <td class="align-middle"><span th:text="${collision.getElementName2()}"></span></td>
+                <td class="align-middle" style="text-align: center"><span
+                        th:text="${collision.getEngineer() != null} ? ${collision.getEngineer().getFullNameWithDiscipline()} : 'Free'"
+                        th:style="${collision.getEngineer() != null} ? '' : 'color:green'"></span>
+                </td>
+<!--                <td class="align-middle" style="text-align: center">-->
+<!--                <span th:if="${collision.isFake()}">-->
+<!--                    <a th:href="@{/collisions/{id}/not-fake(id=${collision.getId()})}" class="btn btn-info btn-sm"-->
+<!--                       role="button">Not fake</a>-->
+<!--            </span>-->
+<!--                    <span th:unless="${collision.isFake()}">-->
+<!--        <a th:href="@{/collisions/{id}/fake(id=${collision.getId()})}" class="btn btn-warning btn-sm" role="button">Fake</a>-->
+<!--    </span>-->
+<!--                </td>-->
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:unless="${collisions.size() > 0}">
+        <span>No collisions found!</span>
+    </div>
+
+    <nav aria-label="Pagination" th:if="${totalPages > 0}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                <a th:replace="fragments/paging :: paging(1, '<<', 'First Page')"></a>
+            </li>
+            <li class="page-item font-weight-bold" th:classappend="${currentPage == 1} ? 'disabled'">
+                <a th:replace="fragments/paging :: paging(${currentPage - 1}, 'Prev', 'Previous Page')"></a>
+            </li>
+            <li class="page-item disabled" th:if="${currentPage - 2 > 1}">
+                <a class="page-link" href="#">...</a>
+            </li>
+            <li class="page-item" th:classappend="${page == currentPage} ? 'active'"
+                th:each="page : ${#numbers.sequence(currentPage > 2 ? currentPage - 2 : 1, currentPage + 2 < totalPages ? currentPage + 2 : totalPages)}">
+                <a th:replace="fragments/paging :: paging(${page}, ${page}, 'Page ' + ${page})"></a>
+            </li>
+            <li class="page-item disabled" th:if="${currentPage + 2 < totalPages}">
+                <a class="page-link" href="#">...</a>
+            </li>
+            <li class="page-item font-weight-bold" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                <a th:replace="fragments/paging :: paging(${currentPage + 1},'Next', 'Next Page')"></a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                <a th:replace="fragments/paging :: paging(${totalPages}, '>>', 'Last Page')"></a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
-<style>
-    .btn-color-transition {
-        transition: background-color 0.5s ease-in-out;
-    }
-</style>
-<script>
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script type="text/javascript">
+
     function copyToClipboard(button) {
         var text = button.dataset.clipboardText;
         var dummy = document.createElement("textarea");
@@ -73,28 +165,22 @@
 
         button.classList.remove("btn-light");
         button.classList.add("btn-success", "btn-color-transition");
-        button.innerText = "✅";
+        button.innerText = "📋";
         button.disabled = true;
 
-        setTimeout(function() {
+        setTimeout(function () {
             button.classList.remove("btn-success", "btn-color-transition");
             button.classList.add("btn-light", "btn-color-transition");
             button.innerText = "📋";
             button.disabled = false;
         }, 2000);
     }
-</script>
-<!--<a href="/collisions/new">Add new</a>-->
-<br/>
-<a href="/main">Back to main</a>
-<br/>
-<a href="/engineers/">All engineers</a>
 
-<form th:method="POST" th:action="@{/collisions/search}">
-    <label for="query">Enter : </label>
-    <input type="text" id="query" name="query"/>
-    <br/>
-    <input type="submit" value="Search!"/>
-</form>
+    function changePageSize() {
+        $("#searchForm").submit();
+    }
+</script>
+
+
 </body>
 </html>

@@ -1,40 +1,76 @@
 package ru.jbimer.core.controllers;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import ru.jbimer.core.exception.InvalidFileNameException;
 import ru.jbimer.core.models.Collision;
 import ru.jbimer.core.models.Engineer;
+import ru.jbimer.core.security.EngineerDetails;
 import ru.jbimer.core.services.CollisionsService;
 import ru.jbimer.core.services.EngineersService;
+import ru.jbimer.core.services.HtmlReportService;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
-@RequestMapping("/collisions")
+@RequestMapping("/projects/{project_id}/collisions")
 public class CollisionsController {
 
     private final EngineersService engineersService;
     private final CollisionsService collisionsService;
+    private final HtmlReportService service;
 
     @Autowired
-    public CollisionsController(EngineersService engineersService, CollisionsService collisionsService) {
+    public CollisionsController(EngineersService engineersService, CollisionsService collisionsService, HtmlReportService service) {
         this.engineersService = engineersService;
         this.collisionsService = collisionsService;
+        this.service = service;
     }
 
     @GetMapping()
     public String index(Model model,
-                        @RequestParam(value = "page", required = false) Integer page,
-                        @RequestParam(value = "collisions_per_page", required = false) Integer collisionsPerPage) {
-        if (page == null || collisionsPerPage == null)
-            model.addAttribute("collisions", collisionsService.findAll());
-        else
-            model.addAttribute("collisions", collisionsService.findWithPagination(page, collisionsPerPage));
+                        @PathVariable("project_id") int project_id,
+                        @RequestParam(required = false) String keyword,
+                        @RequestParam(defaultValue = "1") Integer page,
+                        @RequestParam(defaultValue = "10") Integer size) {
 
-//        model.addAttribute("engineers", engineerService.findAll());
+        try {
+            List<Collision> collisions;
+            Pageable paging = PageRequest.of(page - 1, size, Sort.by("id"));
+
+            Page<Collision> collisionPage;
+            if (keyword == null) {
+                collisionPage = collisionsService.findAllWithPagination(project_id, paging);
+            } else {
+                collisionPage = collisionsService.searchByDiscipline(keyword, project_id, paging);
+                model.addAttribute("keyword", keyword);
+            }
+
+            collisions = collisionPage.getContent();
+
+            model.addAttribute("collisions", collisions);
+            model.addAttribute("currentPage", collisionPage.getNumber() + 1);
+            model.addAttribute("totalItems", collisionPage.getTotalElements());
+            model.addAttribute("totalPages", collisionPage.getTotalPages());
+            model.addAttribute("pageSize", size);
+        } catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
+        }
+
         return "collisions/index";
     }
 
@@ -42,11 +78,17 @@ public class CollisionsController {
     public String show(@PathVariable("id") int id,
                        Model model,
                        @ModelAttribute("engineer") Engineer engineer) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String authority = authentication.getAuthorities().stream().findFirst().orElse(null).getAuthority();
+
+
         Collision collision = collisionsService.findOneAndEngineer(id);
 
         Engineer collisionOwner = collision.getEngineer();
 
         model.addAttribute("collision", collision);
+        model.addAttribute("comments", collision.getComments());
+        model.addAttribute("role", authority);
         if (collisionOwner != null){
             model.addAttribute("owner", collisionOwner);
         }
@@ -56,38 +98,22 @@ public class CollisionsController {
         return "collisions/show";
     }
 
-    @GetMapping("/new")
-    public String newCollision(@ModelAttribute("collision") Collision collision) {
-        return "collisions/new";
+    @GetMapping("/upload")
+    public String uploadCollisionsReportPage(Model model) {
+        return "collisions/upload";
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("collision") @Valid Collision collision,
-                         BindingResult bindingResult) {
+    public String upload(@RequestParam("file") MultipartFile file,
+                         Model model) throws IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        EngineerDetails engineerDetails = (EngineerDetails) authentication.getPrincipal();
 
+        int collisions = service.uploadFile(file, engineerDetails.getEngineer());
+        model.addAttribute("collisionsUploaded", collisions);
 
-        if (bindingResult.hasErrors()) return "collisions/new";
-        collisionsService.save(collision);
-        return "redirect:/collisions";
+        return "collisions/upload";
     }
-
-//    @GetMapping("/{id}/edit")
-//    public String edit(Model model, @PathVariable("id") int id) {
-//
-//        model.addAttribute("collision", collisionService.findOne(id));
-//        return "collisions/edit";
-//    }
-
-//    @PatchMapping("/{id}")
-//    public String update(@ModelAttribute("collision") @Valid Collision collision,
-//                         BindingResult bindingResult,
-//                         @PathVariable("id") int id) {
-//
-//
-//        if (bindingResult.hasErrors()) return "collisions/edit";
-//        collisionService.update(id, collision);
-//        return String.format("redirect:/collisions/%s", id);
-//    }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
@@ -109,16 +135,25 @@ public class CollisionsController {
         return "redirect:/collisions/" + id;
     }
 
-
-    @PostMapping("/search")
-    public String makeSearch(Model model, @RequestParam("query") String query) {
-        model.addAttribute("collisions", collisionsService.searchByDiscipline(query));
-        return "collisions/index";
-    }
-
     @GetMapping("/{id}/fake")
     public String markAsFake(@PathVariable("id") int id) {
         collisionsService.markAsFake(id);
-        return "redirect:/collisions";
+        return "redirect:/collisions/" + id;
+    }
+
+    @GetMapping("/{id}/not-fake")
+    public String markAsNotFake(@PathVariable("id") int id) {
+        collisionsService.markAsNotFake(id);
+        return "redirect:/collisions/" + id;
+    }
+
+    @PostMapping("/{id}/add-comment")
+    public String addComment(@PathVariable("id") int id,
+                             @RequestParam("comment") String comment) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        EngineerDetails engineerDetails = (EngineerDetails) authentication.getPrincipal();
+        collisionsService.addComment(id, engineerDetails.getEngineer(), comment);
+
+        return "redirect:/collisions/" + id;
     }
 }
