@@ -73,7 +73,7 @@
             <tr th:each="collision : ${collisions}" th:sorted>
 
                 <td class="align-middle" style="text-align: center">
-                    <a th:href="@{/collisions/{id}(id=${collision.getId()})}">
+                    <a th:href="@{/projects/{project_id}/collisions/{id}(id=${collision.getId()}, project_id=${project_id})}">
                         <button class="btn-table">
                             <i class="fa fa-folder"></i>
                         </button>

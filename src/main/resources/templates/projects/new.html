@@ -24,6 +24,18 @@
           <input type="text" class="form-control" th:field="*{name}" id="name"/>
           <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
         </div>
+
+        <div class="form-group" >
+          <label>Engineers:
+            <div th:each="engineer : ${engineers}">
+              <input type="checkbox" name="engineersOnProject"
+                     th:text="${engineer.getFullNameWithDiscipline()}"
+                     th:value="${engineer.id}"
+                     th:field="*{engineersOnProject}"
+              />
+            </div>
+          </label>
+        </div>
         <input type="submit" class="btn btn-primary" value="Create"/>
       </form>
     </div>

@@ -67,6 +67,7 @@ public class CollisionsController {
             model.addAttribute("totalItems", collisionPage.getTotalElements());
             model.addAttribute("totalPages", collisionPage.getTotalPages());
             model.addAttribute("pageSize", size);
+            model.addAttribute("project_id", project_id);
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
         }
@@ -76,6 +77,7 @@ public class CollisionsController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id,
+                       @PathVariable("project_id") int project_id,
                        Model model,
                        @ModelAttribute("engineer") Engineer engineer) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -93,7 +95,7 @@ public class CollisionsController {
             model.addAttribute("owner", collisionOwner);
         }
         else
-            model.addAttribute("engineers", engineersService.findAll());
+            model.addAttribute("engineers", engineersService.findAllOnProject(project_id));
 
         return "collisions/show";
     }

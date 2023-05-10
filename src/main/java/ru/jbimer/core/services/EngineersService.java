@@ -36,6 +36,10 @@ public class EngineersService{
         return engineersRepository.findAll();
     }
 
+    public List<Engineer> findAllOnProject(int project_id) {
+        return engineersRepository.findAllOnProject(project_id);
+    }
+
     public List<Engineer> findAllSortedByCollisionsSize() {
         List<Engineer> engineers = new ArrayList<>(engineerDAO.index());
 
