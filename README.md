@@ -3,15 +3,15 @@
 **JBimer** designed specifically for BIM-engineers to easily manage and resolve collision conflicts in **BIM** models. The application works with clash reports from **Autodesk Revit** and allows engineers to create tasks, track statistics, send reports to customers, manage documentation, and communicate through a built-in chat. With these features, the application provides a comprehensive solution for MEP engineers to streamline their workflow and improve collaboration.
 
 ## Features
-1. **Collision Conflict Resolution:** The application provides a simple and effective way for MEP engineers to manage and resolve collision conflicts in BIM models.
-2. **HTML Report Upload:** The BIM coordinator can upload HTML reports generated from Autodesk Revit, allowing engineers to easily view and analyze the collision conflicts.
-3. **Database Storage:** All collision objects are saved in the database and have an up-to-date status, making it easy to keep track of the progress and ensure that conflicts are resolved in a timely manner.
-4. **Task Management:** The BIM coordinator can assign tasks to specific engineers for resolving conflicts, or if not possible, allow engineers to choose which conflicts they will work on.
-5. **Real-time Statistics:** The application provides up-to-date statistics on the progress of conflict resolution, making it easy for the BIM coordinator and customers to monitor the project's status.
-6. **Automated Reports:** Automatically generated reports can be sent to customers to demonstrate the project's progress and ensure transparency in the process.
-7. **Notifications:** Users receive notifications when they are signed up for new conflicts, ensuring that they are aware of their responsibilities and can address the conflicts promptly.
-8. **Commenting and Chatting:** Users can comment on conflicts and chat with other members to resolve difficult problems quickly and efficiently.
-9. **Image Attachment:** Users can attach images to collision objects, providing a visual aid for resolving the conflicts.
+- [x] **Collision Conflict Resolution:** The application provides a simple and effective way for MEP engineers to manage and resolve collision conflicts in BIM models.
+- [x] **HTML Report Upload:** The BIM coordinator can upload HTML reports generated from Autodesk Revit, allowing engineers to easily view and analyze the collision conflicts.
+- [x] **Database Storage:** All collision objects are saved in the database and have an up-to-date status, making it easy to keep track of the progress and ensure that conflicts are resolved in a timely manner.
+- [x] **Task Management:** The BIM coordinator can assign tasks to specific engineers for resolving conflicts, or if not possible, allow engineers to choose which conflicts they will work on.
+- [ ] **Real-time Statistics:** The application provides up-to-date statistics on the progress of conflict resolution, making it easy for the BIM coordinator and customers to monitor the project's status.
+- [ ] **Automated Reports:** Automatically generated reports can be sent to customers to demonstrate the project's progress and ensure transparency in the process.
+- [ ] **Notifications:** Users receive notifications when they are signed up for new conflicts, ensuring that they are aware of their responsibilities and can address the conflicts promptly.
+- [x] **Commenting and Chatting:** Users can comment on conflicts and chat with other members to resolve difficult problems quickly and efficiently.
+- [ ] **Image Attachment:** Users can attach images to collision objects, providing a visual aid for resolving the conflicts.
 
 ## Stack
 - Java 17
