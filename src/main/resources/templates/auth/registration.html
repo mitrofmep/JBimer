@@ -13,9 +13,6 @@
     <div class="card col-10 col-md-6 col-lg-4">
         <div class="card-body">
 <form th:method="POST" th:action="@{/auth/registration}" th:object="${engineer}" class="mx-auto">
-<!--    <div class="text-center border py-2 mb-3">-->
-<!--        <h6 class="mb-0">Add new engineer</h6>-->
-<!--    </div>-->
     <div class="form-group">
         <label for="username">Enter username: </label>
         <input type="text" class="form-control" th:field="*{username}" id="username"/>

@@ -51,9 +51,6 @@
                                 th:selected="${s == pageSize}"></option>
                     </select>
                 </div>
-<!--                <div class="col-md-1 mt-2">-->
-<!--                    <button id="btnClear" class="btn btn-info">Clear</button>-->
-<!--                </div>-->
             </div>
         </form>
     </div>
@@ -104,15 +101,6 @@
                         th:text="${collision.getEngineer() != null} ? ${collision.getEngineer().getFullNameWithDiscipline()} : 'Free'"
                         th:style="${collision.getEngineer() != null} ? '' : 'color:green'"></span>
                 </td>
-<!--                <td class="align-middle" style="text-align: center">-->
-<!--                <span th:if="${collision.isFake()}">-->
-<!--                    <a th:href="@{/collisions/{id}/not-fake(id=${collision.getId()})}" class="btn btn-info btn-sm"-->
-<!--                       role="button">Not fake</a>-->
-<!--            </span>-->
-<!--                    <span th:unless="${collision.isFake()}">-->
-<!--        <a th:href="@{/collisions/{id}/fake(id=${collision.getId()})}" class="btn btn-warning btn-sm" role="button">Fake</a>-->
-<!--    </span>-->
-<!--                </td>-->
             </tr>
             </tbody>
         </table>
