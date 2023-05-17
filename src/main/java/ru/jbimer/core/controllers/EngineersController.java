@@ -46,23 +46,6 @@ public class EngineersController {
     }
 
 
-
-//    @GetMapping("/new")
-//    public String newEngineer(@ModelAttribute("engineer") Engineer engineer) {
-//        return "engineers/new";
-//    }
-
-//    @PostMapping()
-//    public String create(@ModelAttribute("engineer") @Valid Engineer engineer,
-//                         BindingResult bindingResult) {
-//
-//        engineerValidator.validate(engineer, bindingResult);
-//
-//        if (bindingResult.hasErrors()) return "engineers/new";
-//        engineersService.register(engineer);
-//        return "redirect:/engineers";
-//    }
-
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
 
@@ -74,9 +57,6 @@ public class EngineersController {
     public String update(@ModelAttribute("engineer") @Valid Engineer updatedEngineer,
                          BindingResult bindingResult,
                          @PathVariable("id") int id) {
-
-//        engineerValidator.validate(engineer, bindingResult);
-
 
         if (bindingResult.hasErrors()) return "engineers/edit";
 
@@ -93,7 +73,6 @@ public class EngineersController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
-            // Invalidate the user's session and clear the SecurityContextHolder
             SecurityContextHolder.getContext().setAuthentication(null);
         }
         return "redirect:/logout";

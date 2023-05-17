@@ -138,6 +138,7 @@ public class CollisionsService {
         collisionsRepository.findById(id).ifPresent(
                 collision -> {
                     collision.setFake(true);
+                    collision.setEngineer(null);
                 }
         );
     }

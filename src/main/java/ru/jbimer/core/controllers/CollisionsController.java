@@ -5,24 +5,22 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.jbimer.core.exception.InvalidFileNameException;
 import ru.jbimer.core.models.Collision;
 import ru.jbimer.core.models.Engineer;
+import ru.jbimer.core.models.Project;
 import ru.jbimer.core.security.EngineerDetails;
 import ru.jbimer.core.services.CollisionsService;
 import ru.jbimer.core.services.EngineersService;
 import ru.jbimer.core.services.HtmlReportService;
+import ru.jbimer.core.services.ProjectService;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -33,12 +31,14 @@ public class CollisionsController {
     private final EngineersService engineersService;
     private final CollisionsService collisionsService;
     private final HtmlReportService service;
+    private final ProjectService projectService;
 
     @Autowired
-    public CollisionsController(EngineersService engineersService, CollisionsService collisionsService, HtmlReportService service) {
+    public CollisionsController(EngineersService engineersService, CollisionsService collisionsService, HtmlReportService service, ProjectService projectService) {
         this.engineersService = engineersService;
         this.collisionsService = collisionsService;
         this.service = service;
+        this.projectService = projectService;
     }
 
     @GetMapping()
@@ -101,61 +101,53 @@ public class CollisionsController {
     }
 
     @GetMapping("/upload")
-    public String uploadCollisionsReportPage(Model model) {
-        return "collisions/upload";
-    }
-
-    @PostMapping()
-    public String upload(@RequestParam("file") MultipartFile file,
-                         Model model) throws IOException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        EngineerDetails engineerDetails = (EngineerDetails) authentication.getPrincipal();
-
-        int collisions = service.uploadFile(file, engineerDetails.getEngineer());
-        model.addAttribute("collisionsUploaded", collisions);
-
+    public String uploadCollisionsReportPage(Model model, @PathVariable("project_id") int project_id) {
+        model.addAttribute("project", projectService.findOne(project_id));
         return "collisions/upload";
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
+    public String delete(@PathVariable("id") int id, @PathVariable("project_id") int project_id) {
 
         collisionsService.delete(id);
-        return "redirect:/collisions";
+        return "redirect:projects/" + project_id + "/collisions";
 
     }
 
     @PatchMapping("/{id}/release")
-    public String release(@PathVariable("id") int id) {
+    public String release(@PathVariable("id") int id,
+                          @PathVariable("project_id") int project_id) {
         collisionsService.release(id);
-        return "redirect:/collisions/" + id;
+        return "redirect:/projects/" + project_id + "/collisions/" + id;
     }
 
     @PatchMapping("/{id}/assign")
-    public String assign(@PathVariable("id") int id, @ModelAttribute("engineer")Engineer engineer) {
+    public String assign(@PathVariable("id") int id, @ModelAttribute("engineer")Engineer engineer,
+                         @PathVariable("project_id") int project_id) {
         collisionsService.assign(id, engineer);
-        return "redirect:/collisions/" + id;
+        return "redirect:/projects/" + project_id + "/collisions/" + id;
     }
 
     @GetMapping("/{id}/fake")
-    public String markAsFake(@PathVariable("id") int id) {
+    public String markAsFake(@PathVariable("id") int id, @PathVariable("project_id") int project_id) {
         collisionsService.markAsFake(id);
-        return "redirect:/collisions/" + id;
+        return "redirect:/projects/" + project_id + "/collisions/" + id;
     }
 
     @GetMapping("/{id}/not-fake")
-    public String markAsNotFake(@PathVariable("id") int id) {
+    public String markAsNotFake(@PathVariable("id") int id, @PathVariable("project_id") int project_id) {
         collisionsService.markAsNotFake(id);
-        return "redirect:/collisions/" + id;
+        return "redirect:/projects/" + project_id + "/collisions/" + id;
     }
 
     @PostMapping("/{id}/add-comment")
     public String addComment(@PathVariable("id") int id,
-                             @RequestParam("comment") String comment) {
+                             @RequestParam("comment") String comment,
+                             @PathVariable("project_id") int project_id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         EngineerDetails engineerDetails = (EngineerDetails) authentication.getPrincipal();
         collisionsService.addComment(id, engineerDetails.getEngineer(), comment);
 
-        return "redirect:/collisions/" + id;
+        return "redirect:/projects/" + project_id + "/collisions/" + id;
     }
 }

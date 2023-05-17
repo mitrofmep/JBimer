@@ -32,4 +32,8 @@ public class HtmlReportData {
     @ManyToOne
     @JoinColumn(name = "engineer_id", referencedColumnName = "engineer_id")
     private Engineer engineer;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id", referencedColumnName = "project_id")
+    private Project project;
 }

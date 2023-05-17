@@ -32,6 +32,13 @@
                         </div>
                     </div>
                 </div>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <form th:action="@{/projects/{id}/collisions/upload(id=${project.getId()})}" method="get">
+                            <button class="btn btn-warning btn-block" type="submit">Update report</button>
+                        </form>
+                    </div>
+                </div>
             </div>
             <div class="col-lg-4">
                 <div class="card mb-4">

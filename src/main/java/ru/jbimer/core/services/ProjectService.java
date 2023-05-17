@@ -3,6 +3,7 @@ package ru.jbimer.core.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.jbimer.core.exception.EmptyEngineersListException;
 import ru.jbimer.core.repositories.ProjectRepository;
 import ru.jbimer.core.models.Project;
 

@@ -52,7 +52,8 @@ public class ProjectController {
 
     @PostMapping
     public String create(@ModelAttribute("project") @Valid Project project,
-                         BindingResult bindingResult) {
+                         BindingResult bindingResult, Model model) {
+        model.addAttribute("engineers", engineersService.findAll());
         if (bindingResult.hasErrors()) return "projects/new";
         projectService.save(project);
         return "redirect:/projects";

@@ -29,7 +29,7 @@
 
 
     <div class="my-3">
-        <form th:action="@{/collisions}" id="searchForm">
+        <form th:action="@{/projects/{project_id}/collisions(project_id=${project_id})}" id="searchForm">
             <div class="row d-flex">
                 <div class="col-md-6 mt-2">
                     <div class="search">

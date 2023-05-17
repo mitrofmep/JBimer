@@ -78,18 +78,12 @@
         </div>
         <div class="card mb-4">
           <div class="card-body">
-            <p class="mb-4" th:text="${'Active collisions: ' + collisions.size()}"/>
-            <div th:each="collision : ${collisions}">
-              <button>
-                <a th:href="@{/collisions/{id}(id=${collision.getId()})}"
-                   th:text="${collision.getStatus() + ' --- '
-           + collision.getDiscipline1() + '-'
-           + collision.getElementName1() + '-'
-           + collision.getElementId1() + '----'
-           + collision.getDiscipline2() + '-'
-           + collision.getElementName2() + '-'
-           + collision.getElementId2() + '----'}">collision</a>
-              </button>
+            <h5 class="my-1 mb-4" th:text="${'Active collisions: ' + collisions.size()}"></h5>
+            <div th:each="collision : ${collisions}" class="mb-2">
+              <form th:action="@{/projects/{project_id}/collisions/{collision_id}(collision_id=${collision.getId()}, project_id=${collision.getProjectBase().getId()})}" method="get">
+                <button class="btn btn-outline-dark btn-block" type="submit"
+                        th:text="${collision.getProjectBase().getName() + ': ' + collision.getDiscipline1() + '-' + collision.getDiscipline2() + ' : ' + collision.getElementName1() + '-' + collision.getElementName2()}"></button>
+              </form>
             </div>
           </div>
         </div>

@@ -34,6 +34,7 @@
                      th:field="*{engineersOnProject}"
               />
             </div>
+            <div style="color:red" th:if="${#fields.hasErrors('engineersOnProject')}" th:errors="*{engineersOnProject}"></div>
           </label>
         </div>
         <input type="submit" class="btn btn-primary" value="Create"/>

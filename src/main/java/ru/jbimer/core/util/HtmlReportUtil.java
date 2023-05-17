@@ -4,6 +4,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 import ru.jbimer.core.models.Collision;
+import ru.jbimer.core.models.Project;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,7 +24,7 @@ public class HtmlReportUtil {
         return matcher.matches();
     }
 
-    public List<Collision> parse(Document doc, String filename) {
+    public List<Collision> parse(Document doc, String filename, Project project) {
         String regexDisciplines = "^(\\p{L}+)-(\\p{L}+)\\.html$";
         Date currDate = new Date();
 
@@ -69,6 +70,7 @@ public class HtmlReportUtil {
                         .elementId2(id2)
                         .status("Active")
                         .createdAt(currDate)
+                        .projectBase(project)
                         .build();
                 collisionList.add(collision);
             }

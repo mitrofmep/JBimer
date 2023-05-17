@@ -26,13 +26,13 @@
                         <br/>
                         <div class="d-flex justify-content-center mb-2">
 
-                            <form th:unless="${collision.isFake()}" th:action="@{/collisions/{id}/fake(id=${collision.getId()})}" method="get">
+                            <form th:unless="${collision.isFake()}" th:action="@{/projects/{project_id}/collisions/{collision_id}/fake(collision_id=${collision.getId()}, project_id=${collision.getProjectBase().getId()})}" method="get">
                                 <button class="btn btn-warning ms-1" type="submit">Mark as false</button>
                             </form>
-                            <form th:if="${collision.isFake()}" th:action="@{/collisions/{id}/not-fake(id=${collision.getId()})}" method="get">
+                            <form th:if="${collision.isFake()}" th:action="@{/projects/{project_id}/collisions/{collision_id}/not-fake(collision_id=${collision.getId()}, project_id=${collision.getProjectBase().getId()})}" method="get">
                                 <button class="btn btn-success ms-1" type="submit">Not false</button>
                             </form>
-                            <form th:method="DELETE" th:action="@{/collisions/{id}(id=${collision.getId()})}">
+                            <form th:method="DELETE" th:action="@{/projects/{project_id}/collisions/{collision_id}(collision_id=${collision.getId()}, project_id=${collision.getProjectBase().getId()})}">
                                 <input type="submit" class="btn btn-danger ms-1" value="Remove">
                             </form>
                         </div>
@@ -47,34 +47,45 @@
                                 <p class="mb-0">Project</p>
                             </div>
                             <div class="col-sm-9">
-                                <p class="text-muted mb-0" th:text="${collision.getProjectBase()}"/>
+                                <p class="text-muted mb-0" th:text="${collision.getProjectBase().getName()}"/>
                             </div>
                         </div>
                         <hr>
                         <div class="row">
-                            <span>This collision is available</span>
-                        </div>
-                        <div class="row" th:if="${engineers != null && !collision.isFake() && role.equals('ROLE_ADMIN')}">
-                            <span>Assign engineer for resolving conflict</span>
+                            <div class="col-sm-3">
+                                <p class="mb-0">Solver</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <div th:if="${collision.isFake()}">
+                                    <p class="badge bg-danger text-white mb-0 h4">This collision is marked as false. No conflict resolution is required</p>
+                                </div>
+                                <div th:unless="${collision.isFake()}">
+                                    <div class="row" th:if="${owner == null}">
+                                        <div class="container">
+                                            <p class="badge bg-success text-white mb-0 h2">This collision is free</p>
+                                        </div><div class="row" th:if="${role.equals('ROLE_ADMIN')}">
+                                            <span>Assign engineer for resolving conflict</span>
 
-                            <form th:method="PATCH" th:action="@{/collisions/{id}/assign(id=${collision.getId()})}">
-                                <label for="engineer">Choose engineer</label>
-                                <select th:object="${engineer}" th:field="*{id}" id="engineer">
-                                    <option th:each="engineer : ${engineers}" th:value="${engineer.getId()}" th:text="${engineer.getFirstName() + ' ' + engineer.getLastName() + ' ' + engineer.getDiscipline()}">
-                                    </option>
-                                </select>
-                                <input type="submit" value="Assign"/>
-                            </form>
-                        </div>
-                        <div class="row" th:if="${owner != null && !collision.isFake()}">
-                            <span>Now assigned to: </span> <span th:text="${owner.getFirstName() + ' ' + owner.getLastName() + ' ' + owner.getDiscipline()}">Engineer</span>
-
-                            <form th:if="${role.equals('ROLE_ADMIN')}" th:method="PATCH" th:action="@{/collisions/{id}/release(id=${collision.getId()})}">
-                                <input type="submit" value="Unassign">
-                            </form>
-                        </div>
-                        <div class="row" th:if="${collision.isFake()}">
-                            <p class="font-monospace">This collision is marked as false. No conflict resolution is required</p>
+                                            <form th:method="PATCH" th:action="@{/projects/{project_id}/collisions/{collision_id}/assign(collision_id=${collision.getId()}, project_id=${collision.getProjectBase().getId()})}">
+                                                <label for="engineer">Choose engineer</label>
+                                                <select th:object="${engineer}" th:field="*{id}" id="engineer">
+                                                    <option th:each="engineer : ${engineers}" th:value="${engineer.getId()}" th:text="${engineer.getFirstName() + ' ' + engineer.getLastName() + ' ' + engineer.getDiscipline()}">
+                                                    </option>
+                                                </select>
+                                                <input type="submit" value="Assign"/>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row" th:if="${owner}">
+                                        <span>Now assigned to: </span> <span th:text="${owner.getFirstName() + ' ' + owner.getLastName() + ' ' + owner.getDiscipline()}">Engineer</span>
+                                        <div class="row" th:if="${role.equals('ROLE_ADMIN')}">
+                                            <form th:if="${role.equals('ROLE_ADMIN')}" th:method="PATCH" th:action="@{/projects/{project_id}/collisions/{collision_id}/release(collision_id=${collision.getId()}, project_id=${collision.getProjectBase().getId()})}">
+                                                <input type="submit" value="Unassign">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <hr/>
                         <div class="row">
@@ -136,7 +147,7 @@
                                 <p class="mb-0">Comments</p>
                             </div>
                             <div>
-                                <form method="post" th:action="@{/collisions/{id}/add-comment(id=${collision.getId()})}">
+                                <form method="post" th:action="@{/projects/{project_id}/collisions/{collision_id}/add-comment(collision_id=${collision.getId()}, project_id=${collision.getProjectBase().getId()})}">
                                     <input type="text" id="comment" name="comment">
                                     <input type="submit" value="Submit">
                                 </form>

@@ -1,6 +1,7 @@
 package ru.jbimer.core.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -20,7 +21,7 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotNull(message = "Field is empty")
+    @NotEmpty(message = "Field is empty")
     @Column(name = "name")
     private String name;
 
@@ -33,5 +34,6 @@ public class Project {
             joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "engineer_id")
     )
+    @org.hibernate.validator.constraints.NotEmpty(message = "Choose at least 1 engineer")
     private List<Engineer> engineersOnProject;
 }
