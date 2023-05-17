@@ -46,3 +46,6 @@
 
 ## Contributions
 Contributions are welcome and encouraged! Please feel free to submit pull requests or open issues if you encounter any problems.
+
+## License
+This application is licensed under the MIT License.
