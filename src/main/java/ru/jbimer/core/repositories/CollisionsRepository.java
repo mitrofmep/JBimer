@@ -20,10 +20,8 @@ import java.util.Optional;
 @Repository
 public interface CollisionsRepository extends JpaRepository<Collision, Integer> {
 
-    @Query("SELECT c FROM Collision c WHERE (c.discipline1 =: disc1 and c.discipline2 = :disc2" +
-            " or c.discipline1 = :disc2 and c.discipline2 = :disc1) and c.projectBase = :project")
-    Page<Collision> findByDisciplinesAndProject(@Param("disc1") String disc1,
-                                                @Param("disc2") String disc2,
+    @Query("SELECT c FROM Collision c LEFT JOIN c.projectBase p WHERE p = :project and (c.discipline1 = :discipline or c.discipline2 = :discipline)")
+    Page<Collision> findByDisciplinesAndProject(@Param("discipline") String discipline,
                                                 @Param("project") Project project,
                                                 Pageable pageable);
     
@@ -33,20 +31,26 @@ public interface CollisionsRepository extends JpaRepository<Collision, Integer> 
     @Query("SELECT c FROM Collision c LEFT JOIN FETCH c.engineer ORDER BY c.id")
     List<Collision> findAllFetchEngineers();
 
-    // engineer.getCollisions()
     List<Collision> findByEngineer(Engineer engineer);
 
-    @Query("SELECT c FROM Collision c WHERE c.elementId1 =: elemId1 and c.elementId2 = :elemId2" +
-            " or c.elementId1 = :elemId2 and c.elementId2 = :elemId1")
+    @Query("SELECT c FROM Collision c LEFT JOIN FETCH c.projectBase WHERE c.projectBase = :project and " +
+            "(c.elementId1 =: elemId1 and c.elementId2 = :elemId2" +
+            " or c.elementId1 = :elemId2 and c.elementId2 = :elemId1)")
     Optional<Collision> findByIdsForValidation(@Param("elemId1") String elemId1,
-                                               @Param("elemId2") String elemId2);
+                                               @Param("elemId2") String elemId2,
+                                               @Param("project") Project project);
 
 
     @Modifying
-    @Query("update Collision c set c.status = 'Done' where c.createdAt < :currDate and (c.discipline1 = :disc1 and c.discipline2 = :disc2 or c.discipline1 = :disc2 and c.discipline2 = :disc1)")
+    @Query("update Collision c set c.status = 'Done' where c.projectBase = :project " +
+            "and c.createdAt < :currDate and (c.discipline1 = :disc1 and c.discipline2 = :disc2 " +
+            "or c.discipline1 = :disc2 and c.discipline2 = :disc1)")
     void updateStatus(@Param("currDate") Date date,
                       @Param("disc1") String disc1,
-                      @Param("disc2") String disc2);
+                      @Param("disc2") String disc2,
+                      @Param("project") Project project);
 
     Page<Collision> findByProjectBase(Project project, Pageable pageable);
+
+    List<Collision> findAllByProjectBase(Project project);
 }

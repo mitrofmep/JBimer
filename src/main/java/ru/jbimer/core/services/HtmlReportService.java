@@ -4,6 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.jbimer.core.dao.CollisionDAO;
 import ru.jbimer.core.exception.InvalidFileNameException;
@@ -12,7 +13,7 @@ import ru.jbimer.core.models.Engineer;
 import ru.jbimer.core.models.HtmlReportData;
 import ru.jbimer.core.models.Project;
 import ru.jbimer.core.repositories.CollisionsRepository;
-import ru.jbimer.core.repositories.StorageRepository;
+import ru.jbimer.core.repositories.HtmlReportDataRepository;
 import ru.jbimer.core.util.HtmlReportUtil;
 
 import java.io.File;
@@ -21,17 +22,18 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional
 public class HtmlReportService {
 
-    private final StorageRepository storageRepository;
+    private final HtmlReportDataRepository htmlReportDataRepository;
     private final CollisionsRepository collisionsRepository;
     private final CollisionsService collisionsService;
     private final HtmlReportUtil htmlReportUtil;
     private final CollisionDAO collisionDAO;
 
     @Autowired
-    public HtmlReportService(StorageRepository storageRepository, CollisionsRepository collisionsRepository, CollisionsService collisionsService, HtmlReportUtil htmlReportUtil, CollisionDAO collisionDAO) {
-        this.storageRepository = storageRepository;
+    public HtmlReportService(HtmlReportDataRepository htmlReportDataRepository, CollisionsRepository collisionsRepository, CollisionsService collisionsService, HtmlReportUtil htmlReportUtil, CollisionDAO collisionDAO) {
+        this.htmlReportDataRepository = htmlReportDataRepository;
         this.collisionsRepository = collisionsRepository;
         this.collisionsService = collisionsService;
         this.htmlReportUtil = htmlReportUtil;
@@ -54,12 +56,16 @@ public class HtmlReportService {
                 .data(doc.html()).build();
 
 
-        storageRepository.save(data);
+        htmlReportDataRepository.save(data);
 
         List<Collision> collisions = htmlReportUtil.parse(doc, file.getOriginalFilename(), project);
 
-        collisionsService.saveAll(collisions);
+        collisionsService.saveAll(collisions, project);
 
         return collisions.size();
+    }
+
+    public List<HtmlReportData> findAllByProject(Project project) {
+        return htmlReportDataRepository.findAllByProject(project);
     }
 }

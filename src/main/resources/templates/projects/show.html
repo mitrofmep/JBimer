@@ -59,6 +59,16 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h6 class="my-1 text-muted mb-4">Last reports:</h6>
+                        <div th:each="report : ${reports}" class="mb-2">
+                            <p style="font-size: smaller" th:text="${report.getEngineer().getFullNameWithDiscipline() + ': ' + report.getDateForProjectShowPage()}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>

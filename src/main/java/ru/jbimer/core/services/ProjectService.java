@@ -3,7 +3,7 @@ package ru.jbimer.core.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.jbimer.core.exception.EmptyEngineersListException;
+import ru.jbimer.core.repositories.CollisionsRepository;
 import ru.jbimer.core.repositories.ProjectRepository;
 import ru.jbimer.core.models.Project;
 
@@ -15,10 +15,12 @@ import java.util.Optional;
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final CollisionsRepository collisionsRepository;
 
     @Autowired
-    public ProjectService(ProjectRepository projectRepository) {
+    public ProjectService(ProjectRepository projectRepository, CollisionsRepository collisionsRepository) {
         this.projectRepository = projectRepository;
+        this.collisionsRepository = collisionsRepository;
     }
 
 

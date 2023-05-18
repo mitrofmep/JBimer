@@ -3,6 +3,7 @@ package ru.jbimer.core.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
@@ -36,4 +37,9 @@ public class HtmlReportData {
     @ManyToOne
     @JoinColumn(name = "project_id", referencedColumnName = "project_id")
     private Project project;
+
+    public String getDateForProjectShowPage() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        return dateFormat.format(this.uploadedAt);
+    }
 }

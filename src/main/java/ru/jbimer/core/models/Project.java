@@ -36,4 +36,25 @@ public class Project {
     )
     @org.hibernate.validator.constraints.NotEmpty(message = "Choose at least 1 engineer")
     private List<Engineer> engineersOnProject;
+
+
+    public int getDoneCollisionsRatio() {
+        if (collisionsOnProject != null && collisionsOnProject.size() > 0) {
+            int doneCollisions = (int) collisionsOnProject.stream()
+                    .filter(collision -> collision.getStatus().equals("Done"))
+                    .count();
+
+            return  (doneCollisions * 100) / collisionsOnProject.size();
+        }
+        return 0;
+    }
+
+    public int getDoneCollisions() {
+        if (collisionsOnProject != null && collisionsOnProject.size() > 0) {
+            return (int) collisionsOnProject.stream()
+                    .filter(collision -> collision.getStatus().equals("Done"))
+                    .count();
+        }
+        return 0;
+    }
 }

@@ -12,6 +12,7 @@ import ru.jbimer.core.models.Collision;
 import ru.jbimer.core.models.Engineer;
 
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -35,9 +36,8 @@ public class CollisionsService {
         return collisionsRepository.findByEngineer(engineer);
     }
 
-    public List<Collision> findAll() {
-
-        return collisionsRepository.findAllFetchEngineers();
+    public List<Collision> findAllByProject(Project project) {
+        return collisionsRepository.findAllByProjectBase(project);
     }
 
 
@@ -60,25 +60,27 @@ public class CollisionsService {
     }
 
     @Transactional
-    public void saveAll(List<Collision> collisions) {
+    public void saveAll(List<Collision> collisions, Project project) {
         String disc1 = collisions.get(0).getDiscipline1();
         String disc2 = collisions.get(0).getDiscipline2();
         Date currDate = collisions.get(0).getCreatedAt();
         for (Collision collision :
                 collisions) {
-            Optional<Collision> foundCollision = collisionsRepository
-                    .findByIdsForValidation(collision.getElementId1(), collision.getElementId2());
-            if (foundCollision.isEmpty()) save(collision);
+            Optional<Collision> foundCollisionOptional = collisionsRepository
+                    .findByIdsForValidation(collision.getElementId1(), collision.getElementId2(), project);
+            if (foundCollisionOptional.isEmpty()) save(collision);
             else {
-                foundCollision.get().setCreatedAt(new Date());
+                Collision foundCollision = foundCollisionOptional.get();
+
+                foundCollision.setCreatedAt(new Date());
             }
         }
-        update(currDate, disc1, disc2);
+        update(currDate, disc1, disc2, project);
     }
 
     @Transactional
-    public void update(Date date, String disc1, String disc2) {
-        collisionsRepository.updateStatus(date, disc1, disc2);
+    public void update(Date date, String disc1, String disc2, Project project) {
+        collisionsRepository.updateStatus(date, disc1, disc2, project);
     }
 
     @Transactional
@@ -130,7 +132,7 @@ public class CollisionsService {
 
     public Page<Collision> searchByDiscipline(String keyword, int project_id, Pageable pageable) {
         Project foundProject = projectService.findOne(project_id);
-        return collisionsRepository.findByDisciplinesAndProject(keyword, keyword, foundProject, pageable);
+        return collisionsRepository.findByDisciplinesAndProject(keyword, foundProject, pageable);
     }
 
     @Transactional

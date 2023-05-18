@@ -13,6 +13,7 @@ import ru.jbimer.core.services.EngineersService;
 import ru.jbimer.core.services.ProjectService;
 
 @Controller
+@RequestMapping("/")
 public class HomeController {
 
     private final EngineersService engineersService;
@@ -25,11 +26,8 @@ public class HomeController {
         this.projectService = projectService;
     }
 
-    @RequestMapping("/main")
-    public String index(Model model) {
-        model.addAttribute("engineers", engineersService.findAll());
-        model.addAttribute("collisions", collisionsService.findAll());
-        model.addAttribute("projects", projectService.findAll());
+    @GetMapping
+    public String index() {
         return "index_main";
     }
 

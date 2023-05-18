@@ -62,12 +62,14 @@ public class CollisionsController {
 
             collisions = collisionPage.getContent();
 
+            Project project = projectService.findOne(project_id);
+
             model.addAttribute("collisions", collisions);
             model.addAttribute("currentPage", collisionPage.getNumber() + 1);
             model.addAttribute("totalItems", collisionPage.getTotalElements());
             model.addAttribute("totalPages", collisionPage.getTotalPages());
             model.addAttribute("pageSize", size);
-            model.addAttribute("project_id", project_id);
+            model.addAttribute("project", project);
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
         }
@@ -110,7 +112,7 @@ public class CollisionsController {
     public String delete(@PathVariable("id") int id, @PathVariable("project_id") int project_id) {
 
         collisionsService.delete(id);
-        return "redirect:projects/" + project_id + "/collisions";
+        return "redirect:/projects/" + project_id + "/collisions";
 
     }
 

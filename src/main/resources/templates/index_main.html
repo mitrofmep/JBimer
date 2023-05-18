@@ -9,38 +9,56 @@
   <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
   <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
   <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+  <style>
+    #logo {
+      display: none;
+      font-size: 10rem;
+      font-weight: bold;
+      color: black;
+      text-align: center;
+      animation: fade-in 2s ease-in-out;
+    }
+
+    #sign {
+      text-align: center;
+      width: fit-content;
+      margin: 0 auto;
+    }
+
+    .btn-lg {
+      width: 10rem;
+    }
+
+    @keyframes fade-in {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+  </style>
 </head>
 <body>
 <div th:replace="~{fragments/header :: header}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
 
-<br/>
-<div class="d-grid gap-2 col-3 mx-auto">
-  <button class="btn btn-primary" type="button" onclick="location.href='/account'">My profile</button>
-  <br/>
-  <button class="btn btn-primary" type="button" onclick="location.href='/engineers'">
-    Engineers <span class="badge text-bg-secondary" th:text="${engineers.size()}"></span>
-  </button>
-  <button class="btn btn-primary" type="button" onclick="location.href='/collisions'">
-    Collisions <span class="badge text-bg-secondary" th:text="${collisions.size()}"></span>
-  </button>
-  <button class="btn btn-primary" type="button" onclick="location.href='/files'">
-    Upload report
-  </button>
-  <button class="btn btn-primary" type="button" onclick="location.href='/collisions'">
-    Projects <span class="badge text-bg-secondary" th:text="${projects.size()}"></span>
-  </button>
-  <a th:each="project : ${projects}" th:href="@{/projects/{id}(id=${project.id})}">
-    <span class="mr-2" th:text="${project.getName()}"></span>
-  </a>
+<div class="container">
+  <div class="row justify-content-center mt-5">
+    <h1 id="logo">JBimer</h1>
+  </div>
+  <div class="row justify-content-center mt-3">
+    <h5 style="text-align: center">BIM Model Collision Conflict Management Tool</h5>
+  </div>
+  <div class="row justify-content-center mt-3">
+    <a href="/projects" class="btn btn-secondary btn-lg">Go to projects</a>
+  </div>
 </div>
-<br/>
-<form th:action="@{/logout}" th:method="POST">
-  <input type="submit" value="Logout">
-</form>
 
-<div th:replace="~{fragments/footer :: footer}"></div>
-
+<script>
+  // Display the logo with a fade-in effect
+  document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("logo").style.display = "block";
+  });
+</script>
 
 </body>
 </html>

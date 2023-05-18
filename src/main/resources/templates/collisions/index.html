@@ -17,7 +17,7 @@
 
 <br/>
 <div class="container-fluid" style="max-width: 1500px; margin: 0 auto;">
-    <h2 class="text-center">Collisions</h2>
+    <h2 class="text-center" th:text="${'Collisions of ' + project.getName()}"></h2>
 
     <div th:if="${message != null}" class="alert alert-success alert-dismissible fade show text-center message"
          role="alert">
@@ -29,7 +29,7 @@
 
 
     <div class="my-3">
-        <form th:action="@{/projects/{project_id}/collisions(project_id=${project_id})}" id="searchForm">
+        <form th:action="@{/projects/{project_id}/collisions(project_id=${project.getId()})}" id="searchForm">
             <div class="row d-flex">
                 <div class="col-md-6 mt-2">
                     <div class="search">
@@ -53,6 +53,11 @@
                 </div>
             </div>
         </form>
+        <div class="col-md-2 mt-2">
+            <form th:action="@{/projects/{project_id}/collisions(project_id=${project.getId()})}" method="get">
+                <button class="btn btn-success ms-1" type="submit">Clear</button>
+            </form>
+        </div>
     </div>
 
     <div>
@@ -70,7 +75,7 @@
             <tr th:each="collision : ${collisions}" th:sorted>
 
                 <td class="align-middle" style="text-align: center">
-                    <a th:href="@{/projects/{project_id}/collisions/{id}(id=${collision.getId()}, project_id=${project_id})}">
+                    <a th:href="@{/projects/{project_id}/collisions/{id}(id=${collision.getId()}, project_id=${project.getId()})}">
                         <button class="btn-table">
                             <i class="fa fa-folder"></i>
                         </button>

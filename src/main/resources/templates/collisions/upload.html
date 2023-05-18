@@ -16,7 +16,7 @@
 
 <div class="container">
   <h4 class="mt-5 mb-3">HTML report from Autodesk Revit upload page</h4>
-  <h4 class="mt-5 mb-3" th:text="${'Current project :' + project.getName()}"></h4>
+  <h4 class="mt-5 mb-3" th:text="${'Current project: ' + project.getName()}"></h4>
   <p class="font-monospace">Please, check, that your file name pattern is
     <span class="bg-info text-light">'DISC-DISC.html'</span>, for example
     <span class="bg-info text-light">'HVAC-EE.html'</span>
@@ -33,7 +33,7 @@
   <p style="color: red" th:text="${errorMessage}"></p>
   <div th:if="${collisionsUpdated > 0}">
     <p style="color: green" th:text="${'Successfully updated collisions: ' + collisionsUpdated}"/>
-    <p>You can upload another report or go to <a th:action="@{/projects/{project_id}/collisions(project_id=${project.getId()})}">All collisions</a></p>
+    <p>You can upload another report or go to <a th:href="@{/projects/{project_id}/collisions(project_id=${project.getId()})}">All collisions of this project</a></p>
   </div>
 </div>
 <div th:replace="~{fragments/footer :: footer}"></div>

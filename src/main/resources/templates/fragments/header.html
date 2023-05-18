@@ -1,7 +1,7 @@
 <header th:fragment="header">
   <nav class="navbar navbar-expand-md bg-dark navbar-dark">
     <div>
-      <a class="navbar-brand" th:href="@{/projects}">
+      <a class="navbar-brand" th:href="@{/}">
         JBimer
       </a>
     </div>
@@ -18,6 +18,11 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" th:href="@{/engineers}">Engineers</a>
+        </li>
+        <li class="nav-item">
+          <form th:action="@{/logout}" th:method="POST">
+            <button type="submit" class="btn nav-link">Logout</button>
+          </form>
         </li>
       </ul>
     </div>
