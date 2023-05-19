@@ -27,6 +27,7 @@ public class HtmlReportData {
     @Temporal(TemporalType.TIMESTAMP)
     private Date uploadedAt;
 
+    @Lob
     @Column(name = "data")
     private String data;
 

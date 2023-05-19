@@ -22,7 +22,8 @@
                 <div class="card mb-4">
                     <div class="card-body text-center">
                         <h5 th:text="${'Collision #' + collision.getId()}" class="my-3"></h5>
-                        <p th:text="${'Uploaded: ' + #dates.format(collision.getCreatedAt(), 'dd-MM-yyyy HH:mm a')}" class="text-muted mb-1"></p>
+                        <p th:text="${'Status: ' + collision.getStatus()}" class="mb-1"></p>
+                        <p th:text="${'Updated: ' + #dates.format(collision.getCreatedAt(), 'dd-MM-yyyy HH:mm a')}" class="text-muted mb-1"></p>
                         <br/>
                         <div class="d-flex justify-content-center mb-2">
 
