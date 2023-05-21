@@ -25,18 +25,23 @@
 
 1. Clone the repository to your local machine:
 
-   `git clone https://github.com/mitrofmep/JBimer.git`
-2. Make sure you have Java 17 and PostgreSQL installed on your machine.
-3. Navigate to the `resources` folder in the root directory of the project and run the `.sql` file to create the database tables. Make sure you have the necessary permissions to create the tables.
-4. Set the database properties in the `application.properties` file. You can use the `application.properties.origin` file as an example.
-5. Navigate to the root directory of the project in the terminal.
-6. Build the project using Maven by running the following command:
+`git clone git@github.com:mitrofmep/JBimer.git`
 
-   `./mvnw clean package`
-7. Run the JAR file using the following command:
+2. Make sure Docker is installed and running on your system. If you are using Windows, ensure that Docker Desktop is running.
 
-   `java -jar JBimer.jar`
-8. Open a web browser and navigate to `http://localhost:8080/` to access the application.
+3. Navigate to the project directory:
+
+`cd <project_directory>`
+
+4. Start the application using Docker Compose:
+
+`docker-compose up`
+
+This command will build and run the Spring Boot application along with its required dependencies in separate Docker containers. Wait for the process to complete, and you will see the application logs indicating a successful startup.
+
+You can now access the application by opening your web browser and visiting the appropriate URL, depending on the configuration specified in the application. By default is:
+
+`localhost:8080`
 
 ## Usage
 1. Open the application
