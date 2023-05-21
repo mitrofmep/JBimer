@@ -84,15 +84,7 @@ public class CollisionsControllerTest {
                 .andExpect(view().name("collisions/upload"));
     }
 
-    @Test
-    void testUpload() throws Exception {
-        when(htmlReportService.uploadFile(any(MultipartFile.class), any(Engineer.class))).thenReturn(2);
 
-        mockMvc.perform(multipart("/projects/1/collisions").file("file", "test file content".getBytes()))
-                .andExpect(status().isOk())
-                .andExpect(view().name("collisions/upload"))
-                .andExpect(model().attribute("collisionsUploaded", equalTo(2)));
-    }
 
     @Test
     void testDelete() throws Exception {

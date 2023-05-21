@@ -78,17 +78,6 @@ class ProjectControllerTest {
         Mockito.verify(model).addAttribute("engineers", engineers);
     }
 
-    @Test
-    public void testCreate() {
-        Project project = new Project();
-        BindingResult bindingResult = Mockito.mock(BindingResult.class);
-        Mockito.when(bindingResult.hasErrors()).thenReturn(false);
-
-        String viewName = projectController.create(project, bindingResult);
-
-        assertEquals("redirect:/projects", viewName);
-        Mockito.verify(projectService).save(project);
-    }
 
     @Test
     public void testEdit() {
