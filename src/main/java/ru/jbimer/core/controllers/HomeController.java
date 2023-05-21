@@ -42,7 +42,7 @@ public class HomeController {
         model.addAttribute("engineer", engineer);
         model.addAttribute("collisions", engineer.getCollisions());
 
-        return "/profile_page";
+        return "profile/profile_page";
     }
 
     @GetMapping("/admin")
