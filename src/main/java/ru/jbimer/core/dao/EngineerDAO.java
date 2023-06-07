@@ -25,10 +25,8 @@ public class EngineerDAO {
     public Set<Engineer> index() {
         Session session = entityManager.unwrap(Session.class);
 
-        Set<Engineer> engineers = new HashSet<Engineer>(session.createQuery("select e from Engineer e " +
+        return new HashSet<Engineer>(session.createQuery("select e from Engineer e " +
                         "left join fetch e.collisions ")
                 .getResultList());
-
-        return engineers;
     }
 }
